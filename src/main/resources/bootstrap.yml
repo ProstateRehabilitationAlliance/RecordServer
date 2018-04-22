@@ -3,7 +3,10 @@ spring:
     name: record-server
   cloud:
     config:
-      uri: http://localhost:8880
-      label: master
+      uri: http://192.168.0.222:8880
+#      discovery:
+#        service-id: config-server
+#        enabled: true
       profile: dev
+      label: master
 
