@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.prostate.record.mapper.AnamnesisMapper">
+  <resultMap id="BaseResultMap" type="com.prostate.record.entity.Anamnesis">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="patient_id" jdbcType="VARCHAR" property="patientId" />
+    <result column="anamnesis_type_id" jdbcType="VARCHAR" property="anamnesisTypeId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="anamnesis_remark" jdbcType="VARCHAR" property="anamnesisRemark" />
+    <result column="create_doctor" jdbcType="VARCHAR" property="createDoctor" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_doctor" jdbcType="VARCHAR" property="updateDoctor" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="delete_doctor" jdbcType="VARCHAR" property="deleteDoctor" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+    <result column="del_flag" jdbcType="VARCHAR" property="delFlag" />
+  </resultMap>
+  <insert id="insert" parameterType="com.prostate.record.entity.Anamnesis">
+    insert into pomr_anamnesis (id, patient_id, anamnesis_type_id, 
+      order_id, anamnesis_remark, create_doctor, 
+      create_time, update_doctor, update_time, 
+      delete_doctor, delete_time, del_flag
+      )
+    values (#{id,jdbcType=VARCHAR}, #{patientId,jdbcType=VARCHAR}, #{anamnesisTypeId,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=VARCHAR}, #{anamnesisRemark,jdbcType=VARCHAR}, #{createDoctor,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateDoctor,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{deleteDoctor,jdbcType=VARCHAR}, #{deleteTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.prostate.record.entity.Anamnesis">
+    insert into pomr_anamnesis
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="patientId != null">
+        patient_id,
+      </if>
+      <if test="anamnesisTypeId != null">
+        anamnesis_type_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="anamnesisRemark != null">
+        anamnesis_remark,
+      </if>
+      <if test="createDoctor != null">
+        create_doctor,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateDoctor != null">
+        update_doctor,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="deleteDoctor != null">
+        delete_doctor,
+      </if>
+      <if test="deleteTime != null">
+        delete_time,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="patientId != null">
+        #{patientId,jdbcType=VARCHAR},
+      </if>
+      <if test="anamnesisTypeId != null">
+        #{anamnesisTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="anamnesisRemark != null">
+        #{anamnesisRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createDoctor != null">
+        #{createDoctor,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDoctor != null">
+        #{updateDoctor,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteDoctor != null">
+        #{deleteDoctor,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

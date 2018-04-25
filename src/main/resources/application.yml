@@ -1,4 +1,23 @@
 server:
   port: 8802
+  tomcat:
+    uri-encoding: UTF-8
+eureka:
+  instance:
+    prefer-ip-address: true
 
-
+spring:
+  redis:
+  #################redis基础配置#################
+    database: 8
+    host: 192.168.0.63
+    password:
+    port: 6379
+    timeout: 5000
+  #################redis线程池设置#################
+    jedis:
+      pool:
+        max-idle: 500
+        min-idle: 50
+        max-active: 2000
+        max-wait: 1000
