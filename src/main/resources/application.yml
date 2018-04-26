@@ -1,5 +1,1 @@
-server:
-  port: 8802
-eureka:
-  instance:
-    prefer-ip-address: true
+
