@@ -15,19 +15,11 @@
     <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
     <result column="del_flag" jdbcType="VARCHAR" property="delFlag" />
   </resultMap>
-  <insert id="insert" parameterType="com.prostate.record.entity.Anamnesis">
-    insert into pomr_anamnesis (id, patient_id, anamnesis_type_id, 
-      order_id, anamnesis_remark, create_doctor, 
-      create_time, update_doctor, update_time, 
-      delete_doctor, delete_time, del_flag
-      )
-    values (#{id,jdbcType=VARCHAR}, #{patientId,jdbcType=VARCHAR}, #{anamnesisTypeId,jdbcType=VARCHAR}, 
-      #{orderId,jdbcType=VARCHAR}, #{anamnesisRemark,jdbcType=VARCHAR}, #{createDoctor,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateDoctor,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{deleteDoctor,jdbcType=VARCHAR}, #{deleteTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=VARCHAR}
-      )
-  </insert>
   <insert id="insertSelective" parameterType="com.prostate.record.entity.Anamnesis">
+    <selectKey keyProperty="id" resultType="java.lang.String"
+               order="BEFORE">
+      select replace(uuid(),'-','') from dual
+    </selectKey>
     insert into pomr_anamnesis
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

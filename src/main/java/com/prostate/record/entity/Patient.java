@@ -1,5 +1,6 @@
 package com.prostate.record.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.lang.NonNull;
 
@@ -7,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Patient {
+public class Patient extends BaseEntity{
     private String id;
 
     private String patientNumber;
@@ -19,6 +20,8 @@ public class Patient {
     private String patientPhone;
 
     private String patientBirthday;
+
+    private String patientAge;
 
     private String patientSex;
 
@@ -36,6 +39,8 @@ public class Patient {
 
     private String createDoctor;
 
+//    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+08")
+    @JsonFormat(pattern="yyyyMMdd",timezone = "GMT+08")
     private Date createTime;
 
     private String updateDoctor;
@@ -94,6 +99,14 @@ public class Patient {
 
     public void setPatientBirthday(String patientBirthday) {
         this.patientBirthday = patientBirthday == null ? null : patientBirthday.trim();
+    }
+
+    public String getPatientAge() {
+        return patientAge;
+    }
+
+    public void setPatientAge(String patientAge) {
+        this.patientAge = patientAge;
     }
 
     public String getPatientSex() {

@@ -35,7 +35,6 @@ public class RedisSerive {
 
     public Doctor getDoctor(String key) {
         ValueOperations<String,String> valueOperations = stringRedisTemplate.opsForValue();
-        System.out.println("REDISGET======="+valueOperations.get(key));
         return jsonUtil.jsonStrToObject(valueOperations.get(key));
     }
 

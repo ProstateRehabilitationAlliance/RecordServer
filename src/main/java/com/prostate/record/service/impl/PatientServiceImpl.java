@@ -1,5 +1,6 @@
 package com.prostate.record.service.impl;
 
+import com.prostate.record.beans.PatientBean;
 import com.prostate.record.entity.Patient;
 import com.prostate.record.mapper.PatientMapper;
 import com.prostate.record.service.PatientService;
@@ -31,11 +32,16 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<Patient> selectByParams(Patient patient) {
-        return null;
+        return patientMapper.selectByParams(patient);
     }
 
     @Override
     public int deleteById(String id) {
         return 0;
+    }
+
+    @Override
+    public List<PatientBean> selectByParamss(PatientBean patientBean) {
+        return patientMapper.selectByParamss(patientBean);
     }
 }

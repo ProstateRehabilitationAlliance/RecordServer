@@ -3,7 +3,7 @@ spring:
     name: record-server
   cloud:
     config:
-      uri: http://192.168.0.222:8880
+      uri: http://192.168.1.222:8880
 #      discovery:
 #        service-id: config-server
 #        enabled: true
