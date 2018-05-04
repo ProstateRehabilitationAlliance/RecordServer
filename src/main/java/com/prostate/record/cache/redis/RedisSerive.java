@@ -1,7 +1,7 @@
 package com.prostate.record.cache.redis;
 
 import com.prostate.record.entity.Doctor;
-import com.prostate.record.utlis.JsonUtil;
+import com.prostate.record.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;

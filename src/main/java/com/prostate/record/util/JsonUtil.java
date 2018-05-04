@@ -1,4 +1,4 @@
-package com.prostate.record.utlis;
+package com.prostate.record.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

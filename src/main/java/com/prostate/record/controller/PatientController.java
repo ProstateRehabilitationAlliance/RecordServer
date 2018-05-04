@@ -6,16 +6,14 @@ import com.prostate.record.entity.BaseEntity;
 import com.prostate.record.entity.Doctor;
 import com.prostate.record.entity.Patient;
 import com.prostate.record.service.PatientService;
-import com.prostate.record.utlis.IdCardUtil;
+import com.prostate.record.util.IdCardUtil;
 import com.prostate.record.validator.phoneValidation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,11 +44,50 @@ public class PatientController extends BaseController {
         patient.setCreateDoctor(doctor.getId());
         patient.setPatientNumber("PRA"+ System.currentTimeMillis());
         patient.setPatientAge(IdCardUtil.getAgeByIdCard(patient.getPatientCard()));
-        patientService.insertSelective(patient);
+        if(patient.getId()==null||"".equals(patient.getId())||patient.getId().length()<32){
+            patientService.insertSelective(patient);
+            resultMap.put("code","20000");
+            resultMap.put("msg","INSERT_SUCCESS");
+            resultMap.put("result",patient);
+            return resultMap;
+        }
+        patientService.updateSelective(patient);
         resultMap.put("code","20000");
-        resultMap.put("msg","SUCCESS");
+        resultMap.put("msg","UPDATE_SUCCESS");
         resultMap.put("result",patient);
         return resultMap;
+
+    }
+
+
+    /**
+     * 根据ID查询患者基本信息
+     * @param patient
+     * @param
+     * @return
+     */
+    @PostMapping(value = "getPatientDetailById")
+    public Map getPatientDetailById(Patient patient){
+
+        resultMap = new LinkedHashMap<>();
+        if(patient.getId()==null||"".equals(patient.getId())){
+            resultMap.put("code","20001");
+            resultMap.put("msg","参数不能为空");
+            resultMap.put("result",null);
+            return resultMap;
+        }
+        PatientBean patientBean = patientService.selectPatientDetailById(patient.getId());
+        if(patient!=null){
+            resultMap.put("code","20000");
+            resultMap.put("msg","SELECT_SUCCESS");
+            resultMap.put("result",patientBean);
+            return resultMap;
+        }
+        resultMap.put("code","20002");
+        resultMap.put("msg","EMPTY_RESULT");
+        resultMap.put("result",null);
+        return resultMap;
+
     }
 
     /**
@@ -88,13 +125,14 @@ public class PatientController extends BaseController {
         }
 
         //查询数据
+        String count = patientService.selectCountByParams(patientBean);
         List<PatientBean> patientBeanList = patientService.selectByParamss(patientBean);
-
         //查询结果不为空时请求响应
         if (patientBeanList!=null&&patientBeanList.size()>0){
             resultMap.put("code","20000");
             resultMap.put("msg","SUCCESS");
             resultMap.put("result",patientBeanList);
+            resultMap.put("count",count);
             return resultMap;
         }
         //查询结果为空时请求响应

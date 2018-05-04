@@ -10,4 +10,10 @@ public interface PatientMapper extends BaseMapper<Patient>{
 
 
     List<PatientBean> selectByParamss(Patient e);
+
+    Patient selectByIdCard(String idCard);
+
+    PatientBean selectPatientDetailById(String id);
+
+    String selectCountByParams(PatientBean patientBean);
 }

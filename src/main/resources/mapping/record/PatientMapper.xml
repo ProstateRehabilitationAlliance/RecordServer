@@ -24,7 +24,50 @@
         <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime"/>
         <result column="del_flag" jdbcType="CHAR" property="delFlag"/>
     </resultMap>
-
+    <sql id="Base_Column_List">
+        id,
+        patient_number,
+        patient_name,
+        patient_card,
+        patient_phone,
+        patient_birthday,
+        patient_age,
+        patient_sex,
+        city_id,
+        detail_address,
+        education_id,
+        profession_id,
+        nation_id,
+        blood_group_id,
+        create_doctor,
+        create_time,
+        update_doctor,
+        update_time,
+        delete_doctor,
+        delete_time,
+        del_flag
+    </sql>
+    <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pomr_patient
+        <where>
+            del_flag = 0
+            AND id = #{id,jdbcType=VARCHAR}
+        </where>
+    </select>
+    <sql id="BaseList_Column_List">
+        id
+    </sql>
+    <select id="selectByIdCard" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="BaseList_Column_List"/>
+        from pomr_patient
+        <where>
+            del_flag = 0
+            AND patient_card = #{id,jdbcType=VARCHAR}
+        </where>
+    </select>
     <!--插入患者信息-->
     <insert id="insertSelective" parameterType="com.prostate.record.entity.Patient">
         <selectKey keyProperty="id" resultType="java.lang.String"
@@ -183,9 +226,11 @@
         </collection>
     </resultMap>
     <sql id="PatientList_Column_List">
-        patient.id id,patient.patient_number patient_number,patient.patient_name patient_name,patient.patient_card patient_card,
+        patient.id id,patient.patient_number patient_number,patient.patient_name patient_name,patient.patient_card
+        patient_card,
         patient.detail_address detail_address,patient.patient_phone patient_phone,
-        patient.patient_age patient_age,patient.patient_sex patient_sex,patient.create_time create_time, patient.blood_group_id blood_group_id,
+        patient.patient_age patient_age,patient.patient_sex patient_sex,patient.create_time create_time,
+        patient.blood_group_id blood_group_id,
         anamnesis.id anamnesis_id,anamnesis.anamnesis_type_id anamnesis_type_id,anamnesis.order_id order_id,
         anamnesis.anamnesis_remark anamnesis_remark,
 
@@ -223,5 +268,36 @@
         </where>
         ORDER BY patient.create_time DESC
         limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="selectPatientDetailById" parameterType="java.lang.String" resultMap="PatientListResultMap">
+        select
+        <include refid="PatientList_Column_List"/>
+        from pomr_patient patient
+        <include refid="PatientList_Left_Join_List"/>
+        <where>
+            patient.del_flag = 0
+            AND patient.id = #{id,jdbcType=VARCHAR}
+        </where>
+    </select>
+
+    <select id="selectCountByParams" parameterType="com.prostate.record.beans.PatientBean" resultType="java.lang.String">
+        select count(patient.id) AS count
+        from pomr_patient patient
+        <where>
+            patient.del_flag = 0
+            <if test="patientName != null and patientName != ''">
+                AND patient.patient_name = #{patientName,jdbcType=VARCHAR}
+            </if>
+            <if test="patientPhone != null and patientPhone != ''">
+                AND patient.patient_phone = #{patientPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="patientNumber != null and patientNumber != ''">
+                AND patient.patient_number = #{patientNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="createDoctor != null and createDoctor != ''">
+                AND patient.create_doctor = #{createDoctor,jdbcType=VARCHAR}
+            </if>
+        </where>
     </select>
 </mapper>

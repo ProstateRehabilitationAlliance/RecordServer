@@ -27,7 +27,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Patient selectById(String id) {
-        return null;
+        return patientMapper.selectById(id);
     }
 
     @Override
@@ -43,5 +43,20 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public List<PatientBean> selectByParamss(PatientBean patientBean) {
         return patientMapper.selectByParamss(patientBean);
+    }
+
+    @Override
+    public Patient selectByIdCard(String idCard) {
+        return patientMapper.selectByIdCard(idCard);
+    }
+
+    @Override
+    public PatientBean selectPatientDetailById(String id) {
+        return patientMapper.selectPatientDetailById(id);
+    }
+
+    @Override
+    public String selectCountByParams(PatientBean patientBean) {
+        return patientMapper.selectCountByParams(patientBean);
     }
 }
