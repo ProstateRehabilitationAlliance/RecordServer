@@ -2,13 +2,11 @@ package com.prostate.record.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.springframework.lang.NonNull;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Patient extends BaseEntity{
+public class Patient extends BaseEntity {
     private String id;
 
     private String patientNumber;
@@ -39,8 +37,8 @@ public class Patient extends BaseEntity{
 
     private String createDoctor;
 
-//    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+08")
-    @JsonFormat(pattern="yyyyMMdd",timezone = "GMT+08")
+    //    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+08")
+    @JsonFormat(pattern = "yyyyMMdd", timezone = "GMT+08")
     private Date createTime;
 
     private String updateDoctor;
@@ -221,5 +219,29 @@ public class Patient extends BaseEntity{
         this.delFlag = delFlag == null ? null : delFlag.trim();
     }
 
+    @Override
+    public String toString() {
+        return "id:" + id
+                + ",patientNumber:" + patientNumber
+                + ",patientName:" + patientName
+                + ",patientCard:" + patientCard
+                + ",patientPhone:" + patientPhone
+                + ",patientBirthday:" + patientBirthday
+                + ",patientAge:" + patientAge
+                + ",patientSex:" + patientSex
+                + ",cityId:" + cityId
+                + ",detailAddress:" + detailAddress
+                + ",educationId:" + educationId
+                + ",professionId:" + professionId
+                + ",nationId:" + nationId
+                + ",bloodGroupId:" + bloodGroupId
+                + ",createDoctor:" + createDoctor
+                + ",createTime:" + createTime
+                + ",updateDoctor:" + updateDoctor
+                + ",updateTime:" + updateTime
+                + ",deleteDoctor:" + deleteDoctor
+                + ",deleteTime:" + deleteTime
+                + ",delFlag:" + delFlag;
+    }
 
 }

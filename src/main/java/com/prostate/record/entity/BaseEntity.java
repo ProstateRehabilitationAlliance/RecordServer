@@ -29,4 +29,5 @@ public class BaseEntity{
     public void setPageNo(int pageNo) {
         this.pageNo = pageNo;
     }
+
 }

@@ -25,10 +25,7 @@ public class IdCaradAvailabilityCheck extends BaseController {
         resultMap = new LinkedHashMap<>();
 
         if ("".equals(idCard) || idCard == null) {
-            resultMap.put("code", "20001");
-            resultMap.put("msg", "EMPTY_PARAM");
-            resultMap.put("result", null);
-            return resultMap;
+            return emptyParamResponse();
         }
         try {
             String tipInfo = IdCardVerification.IDCardValidate(idCard);

@@ -24,102 +24,91 @@ import java.util.Map;
 public class PatientController extends BaseController {
 
 
-    @Autowired
-    private PatientService patientService;
+    private final PatientService patientService;
+
+    private final RedisSerive redisSerive;
 
     @Autowired
-    private RedisSerive redisSerive;
+    public PatientController(PatientService patientService, RedisSerive redisSerive) {
+        this.patientService = patientService;
+        this.redisSerive = redisSerive;
+    }
 
     @PostMapping(value = "addPatient")
-    public Map addPatient(Patient patient, String token){
+    public Map addPatient(Patient patient, String token) {
 
         resultMap = new LinkedHashMap<>();
-        if(patient.getPatientName()==null||"".equals(patient.getPatientName())){
-            resultMap.put("code","20001");
-            resultMap.put("msg","参数不能为空");
-            resultMap.put("result",null);
-            return resultMap;
+        if (patient.getPatientName() == null || "".equals(patient.getPatientName())) {
+
+            return emptyParamResponse();
         }
         Doctor doctor = redisSerive.getDoctor(token);
         patient.setCreateDoctor(doctor.getId());
-        patient.setPatientNumber("PRA"+ System.currentTimeMillis());
+        patient.setPatientNumber("PRA" + System.currentTimeMillis());
         patient.setPatientAge(IdCardUtil.getAgeByIdCard(patient.getPatientCard()));
-        if(patient.getId()==null||"".equals(patient.getId())||patient.getId().length()<32){
-            patientService.insertSelective(patient);
-            resultMap.put("code","20000");
-            resultMap.put("msg","INSERT_SUCCESS");
-            resultMap.put("result",patient);
-            return resultMap;
+        if (patient.getId() == null || "".equals(patient.getId()) || patient.getId().length() < 32) {
+            int i = patientService.insertSelective(patient);
+            if (i >= 0) {
+                return insertSuccseeResponse(patient);
+            }
+            return insertFailedResponse();
         }
-        patientService.updateSelective(patient);
-        resultMap.put("code","20000");
-        resultMap.put("msg","UPDATE_SUCCESS");
-        resultMap.put("result",patient);
-        return resultMap;
+        int i = patientService.updateSelective(patient);
+        if (i >= 0) {
+            return updateSuccseeResponse(patient);
+        }
+        return updateFailedResponse();
 
     }
 
 
     /**
      * 根据ID查询患者基本信息
-     * @param patient
+     * @param patientId
      * @param
      * @return
      */
     @PostMapping(value = "getPatientDetailById")
-    public Map getPatientDetailById(Patient patient){
+    public Map getPatientDetailById(String patientId,String token) {
 
-        resultMap = new LinkedHashMap<>();
-        if(patient.getId()==null||"".equals(patient.getId())){
-            resultMap.put("code","20001");
-            resultMap.put("msg","参数不能为空");
-            resultMap.put("result",null);
-            return resultMap;
+        if (patientId == null || "".equals(patientId)) {
+            return emptyParamResponse();
         }
-        PatientBean patientBean = patientService.selectPatientDetailById(patient.getId());
-        if(patient!=null){
-            resultMap.put("code","20000");
-            resultMap.put("msg","SELECT_SUCCESS");
-            resultMap.put("result",patientBean);
-            return resultMap;
+        PatientBean patientBean = patientService.selectPatientDetailById(patientId);
+        if (patientBean != null) {
+            return querySuccessResponse(patientBean);
         }
-        resultMap.put("code","20002");
-        resultMap.put("msg","EMPTY_RESULT");
-        resultMap.put("result",null);
-        return resultMap;
+        return queryEmptyResponse();
 
     }
 
     /**
      * 查询患者列表
+     *
      * @param token
      * @param pageNo
      * @return
      */
     @PostMapping(value = "getPatientList")
-    public Map getPatientList(String token,String pageNo,String patientName,String number){
+    public Map getPatientList(String token, String pageNo, String patientName, String number) {
         log.info("#########医生端查询患者列表########");
-        resultMap = new LinkedHashMap<>();
         //参数校验
-        if (pageNo==null||"".equals(pageNo)){
-            resultMap.put("code","20001");
-            resultMap.put("msg","PARAM_EMPTY");
-            resultMap.put("result",null);
-            return resultMap;
+        if (pageNo == null || "".equals(pageNo)) {
+            return emptyParamResponse();
         }
         Doctor doctor = redisSerive.getDoctor(token);
         //创建查询条件
         PatientBean patientBean = new PatientBean();
         patientBean.setCreateDoctor(doctor.getId());
-        patientBean.setPageNo(Integer.parseInt(pageNo)* BaseEntity.PAGE_SIZE);
-        patientBean.setPageSize((Integer.parseInt(pageNo)+1)*BaseEntity.PAGE_SIZE);
-        if(patientName!=null&&!"".equals(patientName)){
+        patientBean.setPageNo(Integer.parseInt(pageNo) * BaseEntity.PAGE_SIZE);
+        patientBean.setPageSize((Integer.parseInt(pageNo) + 1) * BaseEntity.PAGE_SIZE);
+        if (patientName != null && !"".equals(patientName)) {
             patientBean.setPatientName(patientName);
         }
-        if(number!=null&&!"".equals(number)){
-            if(phoneValidation.regexCheck(number)){
+        if (number != null && !"".equals(number)) {
+            if (phoneValidation.regexCheck(number)) {
                 patientBean.setPatientPhone(number);
-            }else {
+            } else {
                 patientBean.setPatientNumber(number);
             }
         }
@@ -128,18 +117,11 @@ public class PatientController extends BaseController {
         String count = patientService.selectCountByParams(patientBean);
         List<PatientBean> patientBeanList = patientService.selectByParamss(patientBean);
         //查询结果不为空时请求响应
-        if (patientBeanList!=null&&patientBeanList.size()>0){
-            resultMap.put("code","20000");
-            resultMap.put("msg","SUCCESS");
-            resultMap.put("result",patientBeanList);
-            resultMap.put("count",count);
-            return resultMap;
+        if (patientBeanList != null && patientBeanList.size() > 0) {
+            return querySuccessResponse(patientBeanList,count);
         }
         //查询结果为空时请求响应
-        resultMap.put("code","20002");
-        resultMap.put("msg","RESULT_EMPTY");
-        resultMap.put("result",null);
-        return resultMap;
+        return queryEmptyResponse();
     }
 }
 

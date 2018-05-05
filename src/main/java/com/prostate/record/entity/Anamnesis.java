@@ -125,4 +125,22 @@ public class Anamnesis {
     public void setDelFlag(String delFlag) {
         this.delFlag = delFlag == null ? null : delFlag.trim();
     }
+
+
+    @Override
+    public String toString() {
+        return ",id:" + id
+                + ",patientId:" + patientId
+                + ",anamnesisTypeId:" + anamnesisTypeId
+                + ",orderId:" + orderId
+                + ",anamnesisRemark:" + anamnesisRemark
+                + ",createDoctor:" + createDoctor
+                + ",createTime:" + createTime
+                + ",updateDoctor:" + updateDoctor
+                + ",updateTime:" + updateTime
+                + ",deleteDoctor:" + deleteDoctor
+                + ",deleteTime:" + deleteTime
+                + ",delFlag:" + delFlag;
+
+    }
 }
