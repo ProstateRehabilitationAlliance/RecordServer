@@ -2,17 +2,24 @@ package com.prostate.record.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Patient extends BaseEntity {
+
     private String id;
+
 
     private String patientNumber;
 
+    @Length(min = 2,max = 5)
     private String patientName;
 
+    @Length(min = 16,max = 18)
     private String patientCard;
 
     private String patientPhone;

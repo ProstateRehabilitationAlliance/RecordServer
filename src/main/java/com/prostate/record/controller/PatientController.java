@@ -10,10 +10,12 @@ import com.prostate.record.util.IdCardUtil;
 import com.prostate.record.validator.phoneValidation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +37,10 @@ public class PatientController extends BaseController {
     }
 
     @PostMapping(value = "addPatient")
-    public Map addPatient(Patient patient, String token) {
-
+    public Object addPatient(@Valid Patient patient, String token) {
+//        if (result.hasErrors()) {
+//            return result.getFieldErrors();
+//        }
         resultMap = new LinkedHashMap<>();
         if (patient.getPatientName() == null || "".equals(patient.getPatientName())) {
 
@@ -49,13 +53,13 @@ public class PatientController extends BaseController {
         if (patient.getId() == null || "".equals(patient.getId()) || patient.getId().length() < 32) {
             int i = patientService.insertSelective(patient);
             if (i >= 0) {
-                return insertSuccseeResponse(patient);
+                return insertSuccseeResponse();
             }
             return insertFailedResponse();
         }
         int i = patientService.updateSelective(patient);
         if (i >= 0) {
-            return updateSuccseeResponse(patient);
+            return updateSuccseeResponse();
         }
         return updateFailedResponse();
 
@@ -64,12 +68,13 @@ public class PatientController extends BaseController {
 
     /**
      * 根据ID查询患者基本信息
+     *
      * @param patientId
      * @param
      * @return
      */
     @PostMapping(value = "getPatientDetailById")
-    public Map getPatientDetailById(String patientId,String token) {
+    public Map getPatientDetailById(String patientId, String token) {
 
         if (patientId == null || "".equals(patientId)) {
             return emptyParamResponse();
@@ -118,7 +123,7 @@ public class PatientController extends BaseController {
         List<PatientBean> patientBeanList = patientService.selectByParamss(patientBean);
         //查询结果不为空时请求响应
         if (patientBeanList != null && patientBeanList.size() > 0) {
-            return querySuccessResponse(patientBeanList,count);
+            return querySuccessResponse(patientBeanList, count);
         }
         //查询结果为空时请求响应
         return queryEmptyResponse();
