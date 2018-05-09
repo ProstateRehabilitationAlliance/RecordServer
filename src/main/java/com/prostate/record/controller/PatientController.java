@@ -38,9 +38,6 @@ public class PatientController extends BaseController {
 
     @PostMapping(value = "addPatient")
     public Object addPatient(@Valid Patient patient, String token) {
-//        if (result.hasErrors()) {
-//            return result.getFieldErrors();
-//        }
         resultMap = new LinkedHashMap<>();
         if (patient.getPatientName() == null || "".equals(patient.getPatientName())) {
 

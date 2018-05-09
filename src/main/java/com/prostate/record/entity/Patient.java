@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -22,10 +24,12 @@ public class Patient extends BaseEntity {
     @Length(min = 16,max = 18)
     private String patientCard;
 
+
     private String patientPhone;
 
     private String patientBirthday;
 
+    @Min(value = 1,message = "年龄必须大于1")
     private String patientAge;
 
     private String patientSex;
@@ -42,20 +46,27 @@ public class Patient extends BaseEntity {
 
     private String bloodGroupId;
 
+    @Null
     private String createDoctor;
 
     //    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+08")
     @JsonFormat(pattern = "yyyyMMdd", timezone = "GMT+08")
+    @Null
     private Date createTime;
 
+    @Null
     private String updateDoctor;
 
+    @Null
     private Date updateTime;
 
+    @Null
     private String deleteDoctor;
 
+    @Null
     private Date deleteTime;
 
+    @Null
     private String delFlag;
 
     public String getId() {
