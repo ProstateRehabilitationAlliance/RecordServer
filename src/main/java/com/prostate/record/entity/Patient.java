@@ -32,6 +32,10 @@ public class Patient extends BaseEntity {
     @Min(value = 1,message = "年龄必须大于1")
     private String patientAge;
 
+    private String patientHeight;
+
+    private String patientWeight;
+
     private String patientSex;
 
     private String cityId;
@@ -262,4 +266,19 @@ public class Patient extends BaseEntity {
                 + ",delFlag:" + delFlag;
     }
 
+    public String getPatientHeight() {
+        return patientHeight;
+    }
+
+    public void setPatientHeight(String patientHeight) {
+        this.patientHeight = patientHeight;
+    }
+
+    public String getPatientWeight() {
+        return patientWeight;
+    }
+
+    public void setPatientWeight(String patientWeight) {
+        this.patientWeight = patientWeight;
+    }
 }

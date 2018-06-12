@@ -98,4 +98,48 @@
       </if>
     </trim>
   </insert>
+
+
+  <update id="updateSelective" parameterType="com.prostate.record.entity.Anamnesis">
+    update pomr_anamnesis
+    <set>
+      <if test="patientId != null">
+        patient_id = #{patientId,jdbcType=VARCHAR},
+      </if>
+      <if test="anamnesisTypeId != null">
+        anamnesis_type_id = #{anamnesisTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="anamnesisRemark != null">
+        anamnesis_remark = #{anamnesisRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="checkRepeated" parameterType="com.prostate.record.entity.Anamnesis" resultType="java.lang.Integer">
+    select count(*)
+    from pomr_anamnesis
+    <where>
+      del_flag = 0
+      <if test="patientId != null">
+        AND patient_id = #{patientId,jdbcType=VARCHAR}
+      </if>
+      <if test="anamnesisTypeId != null">
+        AND anamnesis_type_id = #{anamnesisTypeId,jdbcType=VARCHAR}
+      </if>
+      <if test="orderId != null">
+        AND order_id = #{orderId,jdbcType=VARCHAR}
+      </if>
+      <if test="anamnesisRemark != null">
+        AND anamnesis_remark = #{anamnesisRemark,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <delete id="deleteById" parameterType="java.lang.String">
+    delete from pomr_anamnesis where id = #{id,jdbcType=VARCHAR}
+  </delete>
 </mapper>

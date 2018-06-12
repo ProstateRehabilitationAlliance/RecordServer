@@ -125,6 +125,43 @@ public class PatientController extends BaseController {
         //查询结果为空时请求响应
         return queryEmptyResponse();
     }
+
+/*****************************************微信端 接口 **************************************************/
+    /**
+     * 根据微信token查询患者基本信息
+     *
+     * @param
+     * @param
+     * @return
+     */
+    @PostMapping(value = "getPatientDetailByToken")
+    public Map getPatientDetailByToken(String token) {
+        String patientId = "8871fd0d532c11e8967f00163e08d49b";
+        if (patientId == null || "".equals(patientId)) {
+            return emptyParamResponse();
+        }
+        PatientBean patientBean = patientService.selectPatientDetailById(patientId);
+        if (patientBean != null) {
+            return querySuccessResponse(patientBean);
+        }
+        return queryEmptyResponse();
+
+    }
+
+
+    @PostMapping(value = "update")
+    public Object updatePatient(Patient patient, String token) {
+        resultMap = new LinkedHashMap<>();
+        if (patient.getId() == null || "".equals(patient.getId())) {
+            return emptyParamResponse();
+        }
+        int i = patientService.updateSelective(patient);
+        if (i >= 0) {
+            return updateSuccseeResponse();
+        }
+        return updateFailedResponse();
+
+    }
 }
 
 

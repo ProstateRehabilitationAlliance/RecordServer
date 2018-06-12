@@ -3,11 +3,13 @@ package com.prostate.record.service.impl;
 import com.prostate.record.entity.Anamnesis;
 import com.prostate.record.mapper.AnamnesisMapper;
 import com.prostate.record.service.AnamnesisService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class AnamnesisServiceImpl implements AnamnesisService {
 
@@ -36,6 +38,12 @@ public class AnamnesisServiceImpl implements AnamnesisService {
 
     @Override
     public int deleteById(String id) {
-        return 0;
+        return anamnesisMapper.deleteById(id);
+    }
+
+    @Override
+    public boolean checkRepeated(Anamnesis anamnesis) {
+        int i = anamnesisMapper.checkRepeated(anamnesis);
+        return i > 0 ? true : false;
     }
 }

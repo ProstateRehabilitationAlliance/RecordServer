@@ -10,6 +10,8 @@
         <result column="patient_birthday" jdbcType="VARCHAR" property="patientBirthday"/>
         <result column="patient_age" jdbcType="VARCHAR" property="patientAge"/>
         <result column="patient_sex" jdbcType="CHAR" property="patientSex"/>
+        <result column="patient_height" jdbcType="VARCHAR" property="patientHeight"/>
+        <result column="patient_weight" jdbcType="VARCHAR" property="patientWeight"/>
         <result column="city_id" jdbcType="VARCHAR" property="cityId"/>
         <result column="detail_address" jdbcType="VARCHAR" property="detailAddress"/>
         <result column="education_id" jdbcType="VARCHAR" property="educationId"/>
@@ -33,6 +35,8 @@
         patient_birthday,
         patient_age,
         patient_sex,
+        patient_height,
+        patient_weight,
         city_id,
         detail_address,
         education_id,
@@ -100,6 +104,12 @@
             <if test="patientSex != null">
                 patient_sex,
             </if>
+            <if test="patientHeight != null">
+                patient_height,
+            </if>
+            <if test="patientWeight != null">
+                patient_weight,
+            </if>
             <if test="cityId != null">
                 city_id,
             </if>
@@ -165,6 +175,12 @@
             <if test="patientSex != null">
                 #{patientSex,jdbcType=CHAR},
             </if>
+            <if test="patientHeight != null">
+                #{patientHeight,jdbcType=CHAR},
+            </if>
+            <if test="patientWeight != null">
+                #{patientWeight,jdbcType=CHAR},
+            </if>
             <if test="cityId != null">
                 #{cityId,jdbcType=VARCHAR},
             </if>
@@ -206,7 +222,54 @@
             </if>
         </trim>
     </insert>
-
+    <update id="updateSelective" parameterType="com.prostate.record.entity.Patient">
+        update pomr_patient
+        <set>
+            <if test="patientName != null">
+                patient_name = #{patientName,jdbcType=VARCHAR},
+            </if>
+            <if test="patientCard != null">
+                patient_card = #{patientCard,jdbcType=VARCHAR},
+            </if>
+            <if test="patientPhone != null">
+                patient_phone = #{patientPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="patientBirthday != null">
+                patient_birthday = #{patientBirthday,jdbcType=VARCHAR},
+            </if>
+            <if test="patientAge != null">
+                patient_age = #{patientAge,jdbcType=CHAR},
+            </if>
+            <if test="patientSex != null">
+                patient_sex = #{patientSex,jdbcType=CHAR},
+            </if>
+            <if test="patientHeight != null">
+                patient_height = #{patientHeight,jdbcType=CHAR},
+            </if>
+            <if test="patientWeight != null">
+                patient_weight = #{patientWeight,jdbcType=CHAR},
+            </if>
+            <if test="cityId != null">
+                city_id = #{cityId,jdbcType=VARCHAR},
+            </if>
+            <if test="detailAddress != null">
+                detail_address = #{detailAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="educationId != null">
+                education_id = #{educationId,jdbcType=VARCHAR},
+            </if>
+            <if test="professionId != null">
+                profession_id = #{professionId,jdbcType=VARCHAR},
+            </if>
+            <if test="nationId != null">
+                nation_id = #{nationId,jdbcType=VARCHAR},
+            </if>
+            <if test="bloodGroupId != null">
+                blood_group_id = #{bloodGroupId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
     <!--分页查询 患者信息-->
     <resultMap id="PatientListResultMap" type="com.prostate.record.beans.PatientBean">
         <result column="id" jdbcType="VARCHAR" property="id"/>
@@ -215,19 +278,23 @@
         <result column="patient_age" jdbcType="VARCHAR" property="patientAge"/>
         <result column="patient_card" jdbcType="VARCHAR" property="patientCard"/>
         <result column="patient_sex" jdbcType="CHAR" property="patientSex"/>
+        <result column="patientHeight" jdbcType="CHAR" property="patientHeight"/>
+        <result column="patientWeight" jdbcType="CHAR" property="patientWeight"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="blood_group_name" jdbcType="VARCHAR" property="bloodGroup"/>
+        <result column="professionName" jdbcType="VARCHAR" property="professionName"/>
         <result column="detail_address" jdbcType="VARCHAR" property="detailAddress"/>
         <result column="patient_phone" jdbcType="VARCHAR" property="patientPhone"/>
         <collection property="orderBeanList" ofType="com.prostate.record.beans.OrderBean" javaType="ArrayList">
             <result column="allergy_drug_name" jdbcType="VARCHAR" property="name"/>
             <result column="eating_drug_name" jdbcType="VARCHAR" property="name"/>
             <result column="anamnesis_illness_name" jdbcType="VARCHAR" property="name"/>
+            <result column="surgical_history_name" jdbcType="VARCHAR" property="name"/>
         </collection>
     </resultMap>
     <sql id="PatientList_Column_List">
-        patient.id id,patient.patient_number patient_number,patient.patient_name patient_name,patient.patient_card
-        patient_card,
+        patient.id id,patient.patient_number patient_number,patient.patient_name patient_name,
+        patient.patient_card patient_card,patient.patient_height patientHeight,patient.patient_weight patientWeight,
         patient.detail_address detail_address,patient.patient_phone patient_phone,
         patient.patient_age patient_age,patient.patient_sex patient_sex,patient.create_time create_time,
         patient.blood_group_id blood_group_id,
@@ -237,14 +304,18 @@
         allergyDrug.id allergyDrugId,allergyDrug.allergy_drug_name allergy_drug_name,
         eatingDrug.id eatingDrugId,eatingDrug.eating_drug_name eating_drug_name,
         illness.id illnessId,illness.anamnesis_illness_name anamnesis_illness_name,
-        bloodGroup.id bloodGroupId,bloodGroup.blood_group_name blood_group_name
+        surgical.id surgicalId,surgical.surgical_history_name surgical_history_name,
+        bloodGroup.id bloodGroupId,bloodGroup.blood_group_name blood_group_name,
+        bp.id bpId,bp.profession_name professionName
     </sql>
     <sql id="PatientList_Left_Join_List">
         LEFT JOIN pomr_anamnesis anamnesis ON anamnesis.patient_id = patient.id
         LEFT JOIN base_anamnesis_allergy_drug allergyDrug ON allergyDrug.id = anamnesis.order_id
         LEFT JOIN base_anamnesis_eating_drug eatingDrug ON eatingDrug.id = anamnesis.order_id
         LEFT JOIN base_anamnesis_illness illness ON illness.id = anamnesis.order_id
+        LEFT JOIN base_anamnesis_surgical_history surgical ON surgical.id = anamnesis.order_id
         LEFT JOIN base_blood_group bloodGroup ON bloodGroup.id = patient.blood_group_id
+        LEFT JOIN base_profession bp ON bp.id = patient.profession_id
     </sql>
     <select id="selectByParamss" parameterType="com.prostate.record.beans.PatientBean" resultMap="PatientListResultMap">
         select
@@ -300,4 +371,105 @@
             </if>
         </where>
     </select>
+
+
+    <select id="selectPatientInfoById" parameterType="java.lang.String" resultMap="PatientInfoResultMap">
+        select
+        <include refid="PatientInfo_Column_List"/>
+        from pomr_patient patient
+        <include refid="PatientInfo_Left_Join_List"/>
+        <where>
+            patient.del_flag = 0
+            AND patient.id = #{id,jdbcType=VARCHAR}
+        </where>
+        GROUP BY anamnesisAllergyDrug.order_id,
+        anamnesisEatingDrug.order_id,
+        anamnesisIllness.order_id,
+        anamnesisSurgical.order_id
+    </select>
+
+    <resultMap id="PatientInfoResultMap" type="com.prostate.record.beans.PatientAnamnesisBean">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="patient_number" jdbcType="VARCHAR" property="patientNumber"/>
+        <result column="patient_name" jdbcType="VARCHAR" property="patientName"/>
+        <result column="patient_age" jdbcType="VARCHAR" property="patientAge"/>
+        <result column="patient_card" jdbcType="VARCHAR" property="patientCard"/>
+        <result column="patient_sex" jdbcType="CHAR" property="patientSex"/>
+        <result column="patientHeight" jdbcType="CHAR" property="patientHeight"/>
+        <result column="patientWeight" jdbcType="CHAR" property="patientWeight"/>
+        <result column="patientBirthday" jdbcType="CHAR" property="patientBirthday"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="blood_group_name" jdbcType="VARCHAR" property="bloodGroup"/>
+        <result column="professionName" jdbcType="VARCHAR" property="professionName"/>
+        <result column="detail_address" jdbcType="VARCHAR" property="detailAddress"/>
+        <result column="patient_phone" jdbcType="VARCHAR" property="patientPhone"/>
+        <result column="provinceId" jdbcType="VARCHAR" property="provinceId"/>
+        <result column="citysId" jdbcType="VARCHAR" property="citysId"/>
+        <result column="cityId" jdbcType="VARCHAR" property="cityId"/>
+        <result column="education_id" jdbcType="VARCHAR" property="educationId"/>
+        <result column="profession_id" jdbcType="VARCHAR" property="professionId"/>
+        <result column="nation_id" jdbcType="VARCHAR" property="nationId"/>
+        <result column="blood_group_id" jdbcType="VARCHAR" property="bloodGroupId"/>
+        <collection property="anamnesisAllergyDrugList" ofType="com.prostate.record.entity.Anamnesis" javaType="ArrayList">
+            <result column="anamnesisAllergyDrugId" jdbcType="VARCHAR" property="id"/>
+            <result column="anamnesisAllergyDrugOrderId" jdbcType="VARCHAR" property="orderId"/>
+            <result column="allergy_drug_name" jdbcType="VARCHAR" property="anamnesisRemark" />
+        </collection>
+        <collection property="anamnesisEatingDrugList" ofType="com.prostate.record.entity.Anamnesis" javaType="ArrayList">
+            <result column="anamnesisEatingDrugId" jdbcType="VARCHAR" property="id"/>
+            <result column="anamnesisEatingDrugOrderId" jdbcType="VARCHAR" property="orderId"/>
+            <result column="eating_drug_name" jdbcType="VARCHAR" property="anamnesisRemark" />
+        </collection>
+        <collection property="anamnesisIllnessList" ofType="com.prostate.record.entity.Anamnesis" javaType="ArrayList">
+            <result column="anamnesisIllnessId" jdbcType="VARCHAR" property="id"/>
+            <result column="anamnesisIllnessOrderId" jdbcType="VARCHAR" property="orderId"/>
+            <result column="anamnesis_illness_name" jdbcType="VARCHAR" property="anamnesisRemark" />
+        </collection>
+        <collection property="anamnesisSurgicalHistoryList" ofType="com.prostate.record.entity.Anamnesis" javaType="ArrayList">
+            <result column="anamnesisSurgicalId" jdbcType="VARCHAR" property="id"/>
+            <result column="anamnesisSurgicalOrderId" jdbcType="VARCHAR" property="orderId"/>
+            <result column="surgical_history_name" jdbcType="VARCHAR" property="anamnesisRemark" />
+        </collection>
+    </resultMap>
+
+    <sql id="PatientInfo_Column_List">
+        patient.id id,patient.patient_number patient_number,patient.patient_name patient_name,
+        patient.patient_card patient_card,patient.patient_height patientHeight,patient.patient_weight patientWeight,
+        patient.detail_address detail_address,patient.patient_phone patient_phone,
+        patient.patient_age patient_age,patient.patient_sex patient_sex,patient.create_time create_time,
+        patient.blood_group_id blood_group_id,patient.patient_birthday patientBirthday,
+        patient.city_id cityId,patient.education_id,patient.profession_id profession_id,patient.nation_id nation_id,
+        patient.blood_group_id blood_group_id,
+
+        allergyDrug.id allergyDrugId,allergyDrug.allergy_drug_name allergy_drug_name,
+        eatingDrug.id eatingDrugId,eatingDrug.eating_drug_name eating_drug_name,
+        illness.id illnessId,illness.anamnesis_illness_name anamnesis_illness_name,
+        surgical.id surgicalId,surgical.surgical_history_name surgical_history_name,
+        <!--bloodGroup.id bloodGroupId,bloodGroup.blood_group_name blood_group_name,-->
+
+        anamnesisAllergyDrug.id anamnesisAllergyDrugId, anamnesisAllergyDrug.order_id anamnesisAllergyDrugOrderId,
+        anamnesisEatingDrug.id anamnesisEatingDrugId, anamnesisEatingDrug.order_id anamnesisEatingDrugOrderId,
+        anamnesisIllness.id anamnesisIllnessId, anamnesisIllness.order_id anamnesisIllnessOrderId,
+        anamnesisSurgical.id anamnesisSurgicalId, anamnesisSurgical.order_id anamnesisSurgicalOrderId,
+
+        province.id provinceId,citys.id citysId,
+        bp.id bpId,bp.profession_name professionName
+    </sql>
+    <sql id="PatientInfo_Left_Join_List">
+        LEFT JOIN pomr_anamnesis anamnesisAllergyDrug ON anamnesisAllergyDrug.patient_id = patient.id AND anamnesisAllergyDrug.anamnesis_type_id = '0007fe67fa7c4c4195018ebe7926a7c7'
+        LEFT JOIN pomr_anamnesis anamnesisEatingDrug ON anamnesisEatingDrug.patient_id = patient.id AND anamnesisEatingDrug.anamnesis_type_id = '00163e4597b14fe787c86e22b7946790'
+        LEFT JOIN pomr_anamnesis anamnesisIllness ON anamnesisIllness.patient_id = patient.id AND anamnesisIllness.anamnesis_type_id = '00106a226f04411b885e3f328acba4d7'
+        LEFT JOIN pomr_anamnesis anamnesisSurgical ON anamnesisSurgical.patient_id = patient.id AND anamnesisSurgical.anamnesis_type_id = '0007fe67fa7c4c4195018ede7926a7c7'
+
+        LEFT JOIN base_anamnesis_allergy_drug allergyDrug ON allergyDrug.id = anamnesisAllergyDrug.order_id
+        LEFT JOIN base_anamnesis_eating_drug eatingDrug ON eatingDrug.id = anamnesisEatingDrug.order_id
+        LEFT JOIN base_anamnesis_illness illness ON illness.id = anamnesisIllness.order_id
+        LEFT JOIN base_anamnesis_surgical_history surgical ON surgical.id = anamnesisSurgical.order_id
+        <!--LEFT JOIN base_blood_group bloodGroup ON bloodGroup.id = patient.blood_group_id-->
+        LEFT JOIN base_profession bp ON bp.id = patient.profession_id
+        LEFT JOIN base_city city ON city.id = patient.city_id
+        LEFT JOIN base_city citys ON citys.id = city.parent_city_id
+        LEFT JOIN base_city province ON province.id = citys.parent_city_id
+
+    </sql>
 </mapper>

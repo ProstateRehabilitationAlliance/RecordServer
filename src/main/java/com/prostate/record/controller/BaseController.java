@@ -141,4 +141,31 @@ public class BaseController {
         resultMap.put("result",null);
         return resultMap;
     }
+
+
+    /**
+     * DELETE成功返回值
+     * @return
+     */
+    public Map deleteSuccseeResponse(){
+        resultMap = new LinkedHashMap<>();
+        resultMap.put("code","20000");
+        resultMap.put("msg","DELETE_SUCCESS");
+        resultMap.put("result",null);
+        return resultMap;
+    }
+
+
+    /**
+     * DELETE请求失败返回值
+     * @return
+     */
+    public Map deleteFailedResponse(){
+        resultMap = new LinkedHashMap<>();
+        resultMap.put("code","50005");
+        resultMap.put("msg","DELETE_FAILED");
+        resultMap.put("result",null);
+        return resultMap;
+    }
+
 }

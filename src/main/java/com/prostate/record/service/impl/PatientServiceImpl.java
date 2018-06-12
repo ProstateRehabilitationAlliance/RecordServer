@@ -1,5 +1,6 @@
 package com.prostate.record.service.impl;
 
+import com.prostate.record.beans.PatientAnamnesisBean;
 import com.prostate.record.beans.PatientBean;
 import com.prostate.record.entity.Patient;
 import com.prostate.record.mapper.PatientMapper;
@@ -22,7 +23,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public int updateSelective(Patient patient) {
-        return 0;
+        return patientMapper.updateSelective(patient);
     }
 
     @Override
@@ -58,5 +59,10 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public String selectCountByParams(PatientBean patientBean) {
         return patientMapper.selectCountByParams(patientBean);
+    }
+
+    @Override
+    public PatientAnamnesisBean selectPatientInfoById(String id) {
+        return patientMapper.selectPatientInfoById(id);
     }
 }

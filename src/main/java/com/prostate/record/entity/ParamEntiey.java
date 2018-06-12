@@ -1,5 +1,7 @@
 package com.prostate.record.entity;
 
+import java.util.Arrays;
+
 public class ParamEntiey {
 
     public String patientId;
@@ -9,6 +11,8 @@ public class ParamEntiey {
     public String[] anamnesisEatingDrugIds;
 
     public String[] anamnesisIllnessIds;
+
+    public String[] anamnesisSurgicalHistoryIds;
 
     public String[] otherIds;
 
@@ -50,5 +54,25 @@ public class ParamEntiey {
 
     public void setOtherIds(String[] otherIds) {
         this.otherIds = otherIds;
+    }
+
+    public String[] getAnamnesisSurgicalHistoryIds() {
+        return anamnesisSurgicalHistoryIds;
+    }
+
+    public void setAnamnesisSurgicalHistoryIds(String[] anamnesisSurgicalHistoryIds) {
+        this.anamnesisSurgicalHistoryIds = anamnesisSurgicalHistoryIds;
+    }
+
+    @Override
+    public String toString() {
+        return "ParamEntiey{" +
+                "patientId='" + patientId + '\'' +
+                ", anamnesisAllergyDrugIds=" + Arrays.toString(anamnesisAllergyDrugIds) +
+                ", anamnesisEatingDrugIds=" + Arrays.toString(anamnesisEatingDrugIds) +
+                ", anamnesisIllnessIds=" + Arrays.toString(anamnesisIllnessIds) +
+                ", anamnesisSurgicalHistoryIds=" + Arrays.toString(anamnesisSurgicalHistoryIds) +
+                ", otherIds=" + Arrays.toString(otherIds) +
+                '}';
     }
 }

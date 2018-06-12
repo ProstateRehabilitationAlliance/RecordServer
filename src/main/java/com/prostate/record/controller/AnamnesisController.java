@@ -26,18 +26,18 @@ public class AnamnesisController extends BaseController {
     private RedisSerive redisSerive;
 
     @PostMapping(value = "addAnamnesis")
-    public Map addAnamnesis(String token ,ParamEntiey paramEntiey){
+    public Map addAnamnesis(String token, ParamEntiey paramEntiey) {
         log.info("============患者档案既往病史添加========");
         resultMap = new LinkedHashMap<>();
         //参数校验
-        if(paramEntiey==null){
+        if (paramEntiey == null) {
             return emptyParamResponse();
         }
         Doctor doctor = redisSerive.getDoctor(token);
 
         //遍历添加病史项
         String patientId = paramEntiey.getPatientId();
-        if (patientId==null&&"".equals(patientId)){
+        if (patientId == null && "".equals(patientId)) {
             return emptyParamResponse();
         }
         String[] anamnesisAllergyDrugIds = paramEntiey.getAnamnesisAllergyDrugIds();
@@ -45,8 +45,8 @@ public class AnamnesisController extends BaseController {
         String[] anamnesisIllnessIds = paramEntiey.getAnamnesisIllnessIds();
         String[] otherIds = paramEntiey.getOtherIds();
 
-        if(anamnesisAllergyDrugIds!=null&&anamnesisAllergyDrugIds.length>0){
-            for(String anamnesisAllergyDrugId : anamnesisAllergyDrugIds) {
+        if (anamnesisAllergyDrugIds != null && anamnesisAllergyDrugIds.length > 0) {
+            for (String anamnesisAllergyDrugId : anamnesisAllergyDrugIds) {
                 Anamnesis anamnesis = new Anamnesis();
                 anamnesis.setPatientId(patientId);
                 anamnesis.setOrderId(anamnesisAllergyDrugId);
@@ -55,8 +55,8 @@ public class AnamnesisController extends BaseController {
                 anamnesisService.insertSelective(anamnesis);
             }
         }
-        if(anamnesisEatingDrugIds!=null&&anamnesisEatingDrugIds.length>0){
-            for(String anamnesisEatingDrugId : anamnesisEatingDrugIds) {
+        if (anamnesisEatingDrugIds != null && anamnesisEatingDrugIds.length > 0) {
+            for (String anamnesisEatingDrugId : anamnesisEatingDrugIds) {
                 Anamnesis anamnesis = new Anamnesis();
                 anamnesis.setPatientId(patientId);
                 anamnesis.setOrderId(anamnesisEatingDrugId);
@@ -66,8 +66,8 @@ public class AnamnesisController extends BaseController {
 
             }
         }
-        if(anamnesisIllnessIds!=null&&anamnesisIllnessIds.length>0){
-            for(String anamnesisIllnessId : anamnesisIllnessIds) {
+        if (anamnesisIllnessIds != null && anamnesisIllnessIds.length > 0) {
+            for (String anamnesisIllnessId : anamnesisIllnessIds) {
                 Anamnesis anamnesis = new Anamnesis();
                 anamnesis.setPatientId(patientId);
                 anamnesis.setOrderId(anamnesisIllnessId);
@@ -77,8 +77,8 @@ public class AnamnesisController extends BaseController {
 
             }
         }
-        if(otherIds!=null&&otherIds.length>0){
-            for(String otherId : otherIds) {
+        if (otherIds != null && otherIds.length > 0) {
+            for (String otherId : otherIds) {
                 Anamnesis anamnesis = new Anamnesis();
                 anamnesis.setPatientId(patientId);
                 anamnesis.setAnamnesisRemark(otherId);
@@ -90,4 +90,16 @@ public class AnamnesisController extends BaseController {
         return insertSuccseeResponse();
     }
 
+    /****************************微信端接口 ***************************/
+    @PostMapping(value = "delete")
+    public Map addAnamnesis(String token, String id) {
+        if (id == null || "".equals(id)) {
+            return emptyParamResponse();
+        }
+        int i = anamnesisService.deleteById(id);
+        if (i >= 0) {
+            return deleteSuccseeResponse();
+        }
+        return deleteFailedResponse();
+    }
 }

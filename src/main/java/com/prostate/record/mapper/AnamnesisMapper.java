@@ -4,4 +4,5 @@ import com.prostate.record.entity.Anamnesis;
 
 public interface AnamnesisMapper extends BaseMapper<Anamnesis>{
 
+    int checkRepeated(Anamnesis anamnesis);
 }

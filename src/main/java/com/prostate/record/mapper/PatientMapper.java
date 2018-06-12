@@ -1,5 +1,6 @@
 package com.prostate.record.mapper;
 
+import com.prostate.record.beans.PatientAnamnesisBean;
 import com.prostate.record.beans.PatientBean;
 import com.prostate.record.entity.Patient;
 
@@ -16,4 +17,6 @@ public interface PatientMapper extends BaseMapper<Patient>{
     PatientBean selectPatientDetailById(String id);
 
     String selectCountByParams(PatientBean patientBean);
+
+    PatientAnamnesisBean selectPatientInfoById(String id);
 }

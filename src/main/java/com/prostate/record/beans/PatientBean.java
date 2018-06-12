@@ -11,6 +11,8 @@ public class PatientBean extends Patient {
 
     public String bloodGroup;
 
+    public String professionName;
+
     public List<OrderBean> orderBeanList;
 
     public String getBloodGroup() {
@@ -27,5 +29,13 @@ public class PatientBean extends Patient {
 
     public void setOrderBeanList(List<OrderBean> orderBeanList) {
         this.orderBeanList = orderBeanList;
+    }
+
+    public String getProfessionName() {
+        return professionName;
+    }
+
+    public void setProfessionName(String professionName) {
+        this.professionName = professionName;
     }
 }
