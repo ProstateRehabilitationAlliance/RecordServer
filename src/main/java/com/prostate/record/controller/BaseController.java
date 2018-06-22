@@ -168,4 +168,16 @@ public class BaseController {
         return resultMap;
     }
 
+    /**
+     * 请求失败 返回值
+     * @return
+     */
+    public Map requestFailedResponse(Object result){
+        resultMap = new LinkedHashMap<>();
+        resultMap.put("code","60001");
+        resultMap.put("msg","REQUEST_FAILED");
+        resultMap.put("result",result);
+        return resultMap;
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.prostate.record.cache.redis;
 
 import com.prostate.record.entity.Doctor;
+import com.prostate.record.entity.WechatUser;
 import com.prostate.record.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -41,5 +42,9 @@ public class RedisSerive {
     public boolean remove(String key) {
         ValueOperations<String,String> valueOperations = stringRedisTemplate.opsForValue();
         return stringRedisTemplate.delete(key);
+    }
+    public WechatUser getWechatUser(String key) {
+        ValueOperations<String,String> valueOperations = stringRedisTemplate.opsForValue();
+        return jsonUtil.jsonStrToWechatUser(valueOperations.get(key));
     }
 }

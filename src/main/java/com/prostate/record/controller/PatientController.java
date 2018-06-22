@@ -5,12 +5,12 @@ import com.prostate.record.cache.redis.RedisSerive;
 import com.prostate.record.entity.BaseEntity;
 import com.prostate.record.entity.Doctor;
 import com.prostate.record.entity.Patient;
+import com.prostate.record.entity.WechatUser;
 import com.prostate.record.service.PatientService;
 import com.prostate.record.util.IdCardUtil;
 import com.prostate.record.validator.phoneValidation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -136,16 +136,12 @@ public class PatientController extends BaseController {
      */
     @PostMapping(value = "getPatientDetailByToken")
     public Map getPatientDetailByToken(String token) {
-        String patientId = "8871fd0d532c11e8967f00163e08d49b";
-        if (patientId == null || "".equals(patientId)) {
-            return emptyParamResponse();
-        }
-        PatientBean patientBean = patientService.selectPatientDetailById(patientId);
+        WechatUser wechatUser = redisSerive.getWechatUser(token);
+        PatientBean patientBean = patientService.selectPatientDetailById(wechatUser.getId());
         if (patientBean != null) {
             return querySuccessResponse(patientBean);
         }
         return queryEmptyResponse();
-
     }
 
 

@@ -2,10 +2,7 @@ package com.prostate.record.controller;
 
 import com.prostate.record.beans.PatientAnamnesisBean;
 import com.prostate.record.cache.redis.RedisSerive;
-import com.prostate.record.entity.Anamnesis;
-import com.prostate.record.entity.Doctor;
-import com.prostate.record.entity.ParamEntiey;
-import com.prostate.record.entity.Patient;
+import com.prostate.record.entity.*;
 import com.prostate.record.service.AnamnesisService;
 import com.prostate.record.service.PatientService;
 import com.prostate.record.util.IdCardUtil;
@@ -217,9 +214,10 @@ public class PatientAnamnesisController extends BaseController {
 
     @PostMapping(value = "selete")
     public Map seletePatient(String id, String token) {
-        id = "8871fd0d532c11e8967f00163e08d49b";
 
-        PatientAnamnesisBean patientAnamnesisBean = patientService.selectPatientInfoById(id);
+        WechatUser wechatUser = redisSerive.getWechatUser(token);
+
+        PatientAnamnesisBean patientAnamnesisBean = patientService.selectPatientInfoById(wechatUser.getId());
         if (patientAnamnesisBean != null) {
             return querySuccessResponse(patientAnamnesisBean);
         }
