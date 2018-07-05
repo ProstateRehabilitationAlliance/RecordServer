@@ -1,13 +1,14 @@
-package com.prostate.record.mapper;
+package com.prostate.record.mapper.pomr.write;
 
 import com.prostate.record.beans.PatientAnamnesisBean;
 import com.prostate.record.beans.PatientBean;
 import com.prostate.record.entity.Patient;
+import com.prostate.record.mapper.BaseWriteMapper;
 
 import java.util.List;
 
 
-public interface PatientMapper extends BaseMapper<Patient>{
+public interface PatientWriteMapper extends BaseWriteMapper<Patient> {
 
 
     List<PatientBean> selectByParamss(Patient e);

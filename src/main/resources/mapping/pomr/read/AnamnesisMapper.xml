@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.prostate.record.mapper.pomr.read.AnamnesisReadMapper">
+  <resultMap id="BaseResultMap" type="com.prostate.record.entity.Anamnesis">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="patient_id" jdbcType="VARCHAR" property="patientId" />
+    <result column="anamnesis_type_id" jdbcType="VARCHAR" property="anamnesisTypeId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="anamnesis_remark" jdbcType="VARCHAR" property="anamnesisRemark" />
+    <result column="create_doctor" jdbcType="VARCHAR" property="createDoctor" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_doctor" jdbcType="VARCHAR" property="updateDoctor" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="delete_doctor" jdbcType="VARCHAR" property="deleteDoctor" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+    <result column="del_flag" jdbcType="VARCHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, anamnesis_type_id, order_id, anamnesis_remark
+  </sql>
+  <select id="getByPatientId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from pomr_anamnesis
+    <where>
+      del_flag = 0
+      AND patient_id = #{id,jdbcType=VARCHAR}
+    </where>
+  </select>
+
+  <select id="checkRepeated" parameterType="com.prostate.record.entity.Anamnesis" resultType="java.lang.Integer">
+    select count(*)
+    from pomr_anamnesis
+    <where>
+      del_flag = 0
+      <if test="patientId != null">
+        AND patient_id = #{patientId,jdbcType=VARCHAR}
+      </if>
+      <if test="anamnesisTypeId != null">
+        AND anamnesis_type_id = #{anamnesisTypeId,jdbcType=VARCHAR}
+      </if>
+      <if test="orderId != null">
+        AND order_id = #{orderId,jdbcType=VARCHAR}
+      </if>
+      <if test="anamnesisRemark != null">
+        AND anamnesis_remark = #{anamnesisRemark,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+</mapper>

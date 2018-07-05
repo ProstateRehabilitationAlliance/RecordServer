@@ -1,13 +1,16 @@
 package com.prostate.record.controller;
 
 import com.prostate.record.beans.PatientAnamnesisBean;
+import com.prostate.record.beans.PatientBean;
 import com.prostate.record.cache.redis.RedisSerive;
 import com.prostate.record.entity.*;
 import com.prostate.record.service.AnamnesisService;
+import com.prostate.record.service.PatientAnamnesisService;
 import com.prostate.record.service.PatientService;
 import com.prostate.record.util.IdCardUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,17 +23,20 @@ import java.util.Map;
 public class PatientAnamnesisController extends BaseController {
 
 
-    private final PatientService patientService;
+    private PatientService patientService;
 
-    private final AnamnesisService anamnesisService;
+    private AnamnesisService anamnesisService;
 
-    private final RedisSerive redisSerive;
+    private RedisSerive redisSerive;
+
+    private PatientAnamnesisService patientAnamnesisService;
 
     @Autowired
-    public PatientAnamnesisController(PatientService patientService, AnamnesisService anamnesisService, RedisSerive redisSerive) {
+    public PatientAnamnesisController(PatientService patientService, AnamnesisService anamnesisService, RedisSerive redisSerive, PatientAnamnesisService patientAnamnesisService) {
         this.patientService = patientService;
         this.anamnesisService = anamnesisService;
         this.redisSerive = redisSerive;
+        this.patientAnamnesisService = patientAnamnesisService;
     }
 
     @PostMapping(value = "add")
@@ -117,6 +123,30 @@ public class PatientAnamnesisController extends BaseController {
 
         return insertSuccseeResponse(patient.getId());
 
+    }
+
+
+    /**
+     * 根据患者ID查询病历信息
+     *
+     * @param patientId
+     * @return
+     */
+    @GetMapping (value = "getHealthRrecord")
+    public Map getHealthRrecord(String patientId) {
+        //参数校验
+        if (patientId == null || patientId.length() != 32) {
+            return emptyParamResponse();
+        }
+
+        //查询
+        PatientBean patientBean = patientAnamnesisService.getHealthRrecord(patientId);
+
+        //查询结果校验
+        if (patientBean != null) {
+            return querySuccessResponse(patientBean);
+        }
+        return queryEmptyResponse();
     }
 
     @PostMapping(value = "seleteById")

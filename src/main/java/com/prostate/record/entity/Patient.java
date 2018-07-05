@@ -4,18 +4,17 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Patient extends BaseEntity {
+public class Patient extends BaseEntity implements Serializable {
 
+    @Null
     private String id;
 
-
+    @Null
     private String patientNumber;
 
     @Length(min = 2,max = 5)
@@ -29,7 +28,7 @@ public class Patient extends BaseEntity {
 
     private String patientBirthday;
 
-    @Min(value = 1,message = "年龄必须大于1")
+    @DecimalMin(value = "1" ,message = "年龄必须大于1")
     private String patientAge;
 
     private String patientHeight;

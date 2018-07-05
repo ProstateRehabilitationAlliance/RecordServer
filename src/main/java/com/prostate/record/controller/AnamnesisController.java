@@ -4,6 +4,7 @@ import com.prostate.record.cache.redis.RedisSerive;
 import com.prostate.record.entity.Anamnesis;
 import com.prostate.record.entity.Doctor;
 import com.prostate.record.entity.ParamEntiey;
+import com.prostate.record.feignService.StaticServer;
 import com.prostate.record.service.AnamnesisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ *
+ */
 @Slf4j
 @RestController
 @RequestMapping(value = "anamnesis")
@@ -25,8 +31,11 @@ public class AnamnesisController extends BaseController {
     @Autowired
     private RedisSerive redisSerive;
 
+    @Autowired
+    private StaticServer staticServer;
+
     @PostMapping(value = "addAnamnesis")
-    public Map addAnamnesis(String token, ParamEntiey paramEntiey) {
+    public Map addAnamnesis(String token, @Valid ParamEntiey paramEntiey) {
         log.info("============患者档案既往病史添加========");
         resultMap = new LinkedHashMap<>();
         //参数校验
@@ -92,7 +101,7 @@ public class AnamnesisController extends BaseController {
 
     /****************************微信端接口 ***************************/
     @PostMapping(value = "delete")
-    public Map addAnamnesis(String token, String id) {
+    public Map deleteAnamnesis(String token, String id) {
         if (id == null || "".equals(id)) {
             return emptyParamResponse();
         }
@@ -102,4 +111,5 @@ public class AnamnesisController extends BaseController {
         }
         return deleteFailedResponse();
     }
+
 }

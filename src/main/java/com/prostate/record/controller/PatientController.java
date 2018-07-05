@@ -6,6 +6,7 @@ import com.prostate.record.entity.BaseEntity;
 import com.prostate.record.entity.Doctor;
 import com.prostate.record.entity.Patient;
 import com.prostate.record.entity.WechatUser;
+import com.prostate.record.feignService.StaticServer;
 import com.prostate.record.service.PatientService;
 import com.prostate.record.util.IdCardUtil;
 import com.prostate.record.validator.phoneValidation;
@@ -20,22 +21,35 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 患者用户 Controller
+ *
+ */
 @Slf4j
 @RestController
 @RequestMapping(value = "patient")
 public class PatientController extends BaseController {
 
 
-    private final PatientService patientService;
+    private PatientService patientService;
 
-    private final RedisSerive redisSerive;
+    private RedisSerive redisSerive;
+
+    private StaticServer staticServer;
 
     @Autowired
-    public PatientController(PatientService patientService, RedisSerive redisSerive) {
+    public PatientController(PatientService patientService, RedisSerive redisSerive,StaticServer staticServer) {
         this.patientService = patientService;
         this.redisSerive = redisSerive;
+        this.staticServer = staticServer;
     }
 
+    /**
+     * 医生 添加患者
+     * @param patient
+     * @param token
+     * @return
+     */
     @PostMapping(value = "addPatient")
     public Object addPatient(@Valid Patient patient, String token) {
         resultMap = new LinkedHashMap<>();

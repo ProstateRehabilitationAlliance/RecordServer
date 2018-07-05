@@ -2,7 +2,8 @@ package com.prostate.record.service.impl;
 
 
 import com.prostate.record.entity.DoctorPatient;
-import com.prostate.record.mapper.DoctorPatientMapper;
+import com.prostate.record.mapper.pra.read.DoctorPatientReadMapper;
+import com.prostate.record.mapper.pra.write.DoctorPatientWriteMapper;
 import com.prostate.record.service.DoctorPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +13,14 @@ import java.util.List;
 @Service
 public class DoctorPatientServiceImpl implements DoctorPatientService {
     @Autowired
-    private DoctorPatientMapper doctorPatientMapper;
+    private DoctorPatientWriteMapper doctorPatientWriteMapper;
+
+    @Autowired
+    private DoctorPatientReadMapper doctorPatientReadMapper;
 
     @Override
     public int insertSelective(DoctorPatient doctorPatient) {
-        return doctorPatientMapper.insertSelective(doctorPatient);
+        return doctorPatientWriteMapper.insertSelective(doctorPatient);
     }
 
     @Override

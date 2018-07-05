@@ -1,8 +1,8 @@
 package com.prostate.record;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -11,8 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 @EnableEurekaServer
 @SpringBootApplication
-@MapperScan(basePackages = {"com.prostate.record.mapper"})
-//@SpringCloudApplication
+@EnableCaching
 public class RecordApplication {
 
 	public static void main(String[] args) {

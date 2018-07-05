@@ -1,9 +1,12 @@
 package com.prostate.record.entity;
 
+import org.hibernate.validator.constraints.Length;
+
 import java.util.Arrays;
 
 public class ParamEntiey {
 
+    @Length(min = 32,max = 32,message = "患者ID格式不正确")
     public String patientId;
 
     public String[] anamnesisAllergyDrugIds;
