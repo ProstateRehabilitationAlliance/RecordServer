@@ -45,7 +45,7 @@ public class PatientController extends BaseController {
     }
 
     /**
-     * 医生 添加患者
+     * 添加患者 信息
      * @param patient
      * @param token
      * @return
@@ -85,7 +85,7 @@ public class PatientController extends BaseController {
      * @return
      */
     @PostMapping(value = "getPatientDetailById")
-    public Map getPatientDetailById(String patientId, String token) {
+    public Map getPatientDetailById(String patientId) {
 
         if (patientId == null || "".equals(patientId)) {
             return emptyParamResponse();
@@ -159,6 +159,12 @@ public class PatientController extends BaseController {
     }
 
 
+    /**
+     * 修改患者信息
+     * @param patient
+     * @param token
+     * @return
+     */
     @PostMapping(value = "update")
     public Object updatePatient(Patient patient, String token) {
         resultMap = new LinkedHashMap<>();

@@ -26,7 +26,7 @@ public class PatientServiceImpl implements PatientService {
         return patientWriteMapper.insertSelective(patient);
     }
 
-    @CacheEvict(value = "HealthRrecord", key = "'health_record_'+#patient.id", condition = "true", beforeInvocation = true)
+    @CacheEvict(value = "HealthRrecord", key = "#patient.id", condition = "true", beforeInvocation = true)
     @Override
     public int updateSelective(Patient patient) {
         return patientWriteMapper.updateSelective(patient);
@@ -42,7 +42,8 @@ public class PatientServiceImpl implements PatientService {
         return patientReadMapper.selectByParams(patient);
     }
 
-    @CacheEvict(value = "HealthRrecord", key = "'health_record_'+#anamnesis.patientId", condition = "true", beforeInvocation = true)
+    @CacheEvict(value = "HealthRrecord", key = "#anamnesis.patientId", condition = "true", beforeInvocation = true)
+
     @Override
     public int deleteById(String id) {
         return patientWriteMapper.deleteById(id);

@@ -19,6 +19,13 @@ public class IdCaradAvailabilityCheck extends BaseController {
     @Autowired
     private PatientService patientService;
 
+
+    /**
+     * 身份证校验接口
+     *
+     * @param idCard
+     * @return
+     */
     @PostMapping
     @RequestMapping(value = "check")
     public Map check(String idCard) {

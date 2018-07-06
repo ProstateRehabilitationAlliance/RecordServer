@@ -34,6 +34,14 @@ public class AnamnesisController extends BaseController {
     @Autowired
     private StaticServer staticServer;
 
+
+    /**
+     * 单独添加病史信息
+     *
+     * @param token
+     * @param paramEntiey
+     * @return
+     */
     @PostMapping(value = "addAnamnesis")
     public Map addAnamnesis(String token, @Valid ParamEntiey paramEntiey) {
         log.info("============患者档案既往病史添加========");
@@ -101,11 +109,11 @@ public class AnamnesisController extends BaseController {
 
     /****************************微信端接口 ***************************/
     @PostMapping(value = "delete")
-    public Map deleteAnamnesis(String token, String id) {
+    public Map deleteAnamnesis(String token, String id,String patientId) {
         if (id == null || "".equals(id)) {
             return emptyParamResponse();
         }
-        int i = anamnesisService.deleteById(id);
+        int i = anamnesisService.deleteById(id,patientId);
         if (i >= 0) {
             return deleteSuccseeResponse();
         }

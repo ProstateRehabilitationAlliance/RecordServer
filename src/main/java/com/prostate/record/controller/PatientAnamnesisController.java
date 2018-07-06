@@ -1,23 +1,19 @@
 package com.prostate.record.controller;
 
 import com.prostate.record.beans.PatientAnamnesisBean;
-import com.prostate.record.beans.PatientBean;
 import com.prostate.record.cache.redis.RedisSerive;
 import com.prostate.record.entity.*;
 import com.prostate.record.service.AnamnesisService;
 import com.prostate.record.service.PatientAnamnesisService;
 import com.prostate.record.service.PatientService;
 import com.prostate.record.util.IdCardUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-@Slf4j
 @RestController
 @RequestMapping(value = "patientAnamnesis")
 public class PatientAnamnesisController extends BaseController {
@@ -39,6 +35,14 @@ public class PatientAnamnesisController extends BaseController {
         this.patientAnamnesisService = patientAnamnesisService;
     }
 
+    /**
+     * 同时  创建 患者 和 患者病历
+     *
+     * @param patient
+     * @param paramEntiey
+     * @param token
+     * @return
+     */
     @PostMapping(value = "add")
     public Map addPatient(Patient patient, ParamEntiey paramEntiey, String token) {
 
@@ -48,7 +52,6 @@ public class PatientAnamnesisController extends BaseController {
 
         Doctor doctor = redisSerive.getDoctor(token);
 
-        log.info("============患者基本信息添加========");
 
         patient.setCreateDoctor(doctor.getId());
         patient.setPatientNumber("PRA" + System.currentTimeMillis());
@@ -60,7 +63,6 @@ public class PatientAnamnesisController extends BaseController {
         if (i < 0) {
             return insertFailedResponse();
         }
-        log.info("============患者档案既往病史添加========");
 
         String[] anamnesisAllergyDrugIds = paramEntiey.getAnamnesisAllergyDrugIds();
         String[] anamnesisEatingDrugIds = paramEntiey.getAnamnesisEatingDrugIds();
@@ -130,9 +132,9 @@ public class PatientAnamnesisController extends BaseController {
      * 根据患者ID查询病历信息
      *
      * @param patientId
-     * @return
+     * @deprecated
      */
-    @GetMapping (value = "getHealthRrecord")
+    @PostMapping(value = "getHealthRrecord")
     public Map getHealthRrecord(String patientId) {
         //参数校验
         if (patientId == null || patientId.length() != 32) {
@@ -140,36 +142,31 @@ public class PatientAnamnesisController extends BaseController {
         }
 
         //查询
-        PatientBean patientBean = patientAnamnesisService.getHealthRrecord(patientId);
+        PatientAnamnesisBean patientAnamnesisBean = patientAnamnesisService.getHealthRrecord(patientId);
 
         //查询结果校验
-        if (patientBean != null) {
-            return querySuccessResponse(patientBean);
-        }
-        return queryEmptyResponse();
-    }
-
-    @PostMapping(value = "seleteById")
-    public Map seleteById(String id) {
-        if (id == null || "".equals(id)) {
-            return emptyParamResponse();
-        }
-        PatientAnamnesisBean patientAnamnesisBean = patientService.selectPatientInfoById(id);
         if (patientAnamnesisBean != null) {
             return querySuccessResponse(patientAnamnesisBean);
         }
         return queryEmptyResponse();
     }
 
+
     /********************************微信端 接口**************************************/
+    /**
+     * 修改 患者 信息 病历 信息
+     *
+     * @param patient
+     * @param paramEntiey
+     */
     @PostMapping(value = "update")
-    public Map updatePatient(Patient patient, ParamEntiey paramEntiey, String token) {
+    public Map updatePatient(Patient patient, ParamEntiey paramEntiey,String orderAnamnesisId,String orderAnamnesisRemark) {
 
         if (paramEntiey.getPatientId() == null || "".equals(paramEntiey.getPatientId())) {
             return emptyParamResponse();
         }
 
-        log.info("============患者基本信息修改========");
+        //修改患者信息
         patient.setId(paramEntiey.getPatientId());
         int i = patientService.updateSelective(patient);
 
@@ -177,8 +174,10 @@ public class PatientAnamnesisController extends BaseController {
         if (i < 0) {
             return updateFailedResponse();
         }
-        log.info("============患者档案既往病史修改========");
 
+        /**
+         * 修改病史信息
+         */
         String[] anamnesisAllergyDrugIds = paramEntiey.getAnamnesisAllergyDrugIds();
         String[] anamnesisEatingDrugIds = paramEntiey.getAnamnesisEatingDrugIds();
         String[] anamnesisIllnessIds = paramEntiey.getAnamnesisIllnessIds();
@@ -238,16 +237,41 @@ public class PatientAnamnesisController extends BaseController {
                 anamnesisService.insertSelective(anamnesis);
             }
         }
+        //修改其他病史信息
+        if((orderAnamnesisId==null||orderAnamnesisId.length()!=32)&&(orderAnamnesisRemark==null||"".equals(orderAnamnesisRemark))){
+            return updateSuccseeResponse();
+        }else if((orderAnamnesisId==null||orderAnamnesisId.length()!=32)&&orderAnamnesisRemark!=null&&!"".equals(orderAnamnesisRemark)){
+            Anamnesis anamnesis = new Anamnesis();
+            anamnesis.setAnamnesisRemark(orderAnamnesisRemark);
+            anamnesis.setPatientId(patient.getId());
+            anamnesis.setAnamnesisTypeId("0045a520eb9d4a3f93fbef4a2e9de0cf");
+            anamnesisService.insertSelective(anamnesis);
+        }else{
+            Anamnesis anamnesis = new Anamnesis();
+            anamnesis.setPatientId(patient.getId());
+            anamnesis.setId(orderAnamnesisId);
+            anamnesis.setAnamnesisRemark(orderAnamnesisRemark);
+            anamnesisService.updateSelective(anamnesis);
+        }
         return updateSuccseeResponse();
 
     }
 
+
+    /**
+     * 微信 用户查询 病历信息
+     * @param token
+     * @return
+     */
     @PostMapping(value = "selete")
-    public Map seletePatient(String id, String token) {
+    public Map seletePatient(String token) {
 
         WechatUser wechatUser = redisSerive.getWechatUser(token);
 
-        PatientAnamnesisBean patientAnamnesisBean = patientService.selectPatientInfoById(wechatUser.getId());
+        //查询
+        PatientAnamnesisBean patientAnamnesisBean = patientAnamnesisService.getHealthRrecord(wechatUser.getId());
+
+        //查询结果校验
         if (patientAnamnesisBean != null) {
             return querySuccessResponse(patientAnamnesisBean);
         }

@@ -3,9 +3,11 @@ package com.prostate.record.beans;
 import com.prostate.record.entity.Anamnesis;
 import com.prostate.record.entity.Patient;
 
+import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-public class PatientAnamnesisBean extends Patient {
+public class PatientAnamnesisBean extends Patient implements Serializable {
 
     private List<Anamnesis> anamnesisAllergyDrugList;
 
@@ -17,14 +19,63 @@ public class PatientAnamnesisBean extends Patient {
 
     private List<Anamnesis> otherList;
 
-    public String bloodGroup;
+    private String bloodGroup;
 
-    public String professionName;
+    private String professionName;
 
-    public String provinceId;
+    private String EducationName;
 
-    public String citysId;
+    private String NationName;
 
+    private String provinceId;
+
+    private String citysId;
+
+    private LinkedHashMap cityDetailBean;
+
+    public void setPatient(Patient patient) {
+        super.setId(patient.getId());
+        super.setPatientNumber(patient.getPatientNumber());
+        super.setPatientName(patient.getPatientName());
+        super.setPatientCard(patient.getPatientCard());
+        super.setPatientPhone(patient.getPatientPhone());
+        super.setPatientBirthday(patient.getPatientBirthday());
+        super.setPatientAge(patient.getPatientAge());
+        super.setPatientSex(patient.getPatientSex());
+        super.setPatientHeight(patient.getPatientHeight());
+        super.setPatientWeight(patient.getPatientWeight());
+        super.setDetailAddress(patient.getDetailAddress());
+        super.setCreateTime(patient.getCreateTime());
+        super.setBloodGroupId(patient.getBloodGroupId());
+        super.setEducationId(patient.getEducationId());
+        super.setNationId(patient.getNationId());
+        super.setProfessionId(patient.getProfessionId());
+    }
+
+
+    public LinkedHashMap getCityDetailBean() {
+        return cityDetailBean;
+    }
+
+    public void setCityDetailBean(LinkedHashMap cityDetailBean) {
+        this.cityDetailBean = cityDetailBean;
+    }
+
+    public String getEducationName() {
+        return EducationName;
+    }
+
+    public void setEducationName(String educationName) {
+        EducationName = educationName;
+    }
+
+    public String getNationName() {
+        return NationName;
+    }
+
+    public void setNationName(String nationName) {
+        NationName = nationName;
+    }
 
     public List<Anamnesis> getAnamnesisAllergyDrugList() {
         return anamnesisAllergyDrugList;

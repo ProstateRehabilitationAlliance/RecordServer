@@ -1,10 +1,10 @@
 package com.prostate.record.service;
 
-import com.prostate.record.beans.PatientBean;
+import com.prostate.record.beans.PatientAnamnesisBean;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface PatientAnamnesisService {
 
-    PatientBean getHealthRrecord(String patientId);
+    PatientAnamnesisBean getHealthRrecord(String patientId);
 }

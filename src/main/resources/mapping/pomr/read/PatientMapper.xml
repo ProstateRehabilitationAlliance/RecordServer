@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.prostate.record.mapper.pomr.read.PatientReadMapper">
+
     <resultMap id="BaseResultMap" type="com.prostate.record.entity.Patient">
         <result column="id" jdbcType="VARCHAR" property="id"/>
         <result column="patient_number" jdbcType="VARCHAR" property="patientNumber"/>
@@ -26,6 +27,7 @@
         <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime"/>
         <result column="del_flag" jdbcType="CHAR" property="delFlag"/>
     </resultMap>
+
     <sql id="Base_Column_List">
         id, patient_number, patient_name, patient_card, patient_phone, patient_birthday, patient_age, patient_sex, patient_height, patient_weight, city_id, detail_address, education_id, profession_id, nation_id, blood_group_id, create_doctor, create_time, update_doctor, update_time, delete_doctor, delete_time, del_flag
     </sql>
@@ -38,6 +40,7 @@
             AND id = #{id,jdbcType=VARCHAR}
         </where>
     </select>
+
     <sql id="BaseList_Column_List">
         id
     </sql>
@@ -221,6 +224,7 @@
         province.id provinceId,citys.id citysId,
         bp.id bpId,bp.profession_name professionName
     </sql>
+
     <sql id="PatientInfo_Left_Join_List">
         LEFT JOIN pomr_anamnesis anamnesisAllergyDrug ON anamnesisAllergyDrug.patient_id = patient.id AND anamnesisAllergyDrug.anamnesis_type_id = '0007fe67fa7c4c4195018ebe7926a7c7'
         LEFT JOIN pomr_anamnesis anamnesisEatingDrug ON anamnesisEatingDrug.patient_id = patient.id AND anamnesisEatingDrug.anamnesis_type_id = '00163e4597b14fe787c86e22b7946790'

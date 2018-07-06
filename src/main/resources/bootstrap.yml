@@ -4,7 +4,7 @@ spring:
   cloud:
     config:
       uri: http://localhost:8880
-      profile: dev
+      profile: prd
       label: master
 server:
   port: 8802

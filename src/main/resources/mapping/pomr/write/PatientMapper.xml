@@ -152,6 +152,8 @@
             </if>
         </trim>
     </insert>
+
+
     <update id="updateSelective" parameterType="com.prostate.record.entity.Patient">
         update pomr_patient
         <set>
