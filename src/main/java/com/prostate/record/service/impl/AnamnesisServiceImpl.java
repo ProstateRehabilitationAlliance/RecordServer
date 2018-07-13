@@ -21,9 +21,16 @@ public class AnamnesisServiceImpl implements AnamnesisService {
     @Autowired
     private AnamnesisReadMapper anamnesisReadMapper;
 
+    @CacheEvict(value = "HealthRrecord", key = "#anamnesis.getPatientId()", condition = "true", beforeInvocation = true)
     @Override
     public int insertSelective(Anamnesis anamnesis) {
         return anamnesisWriteMapper.insertSelective(anamnesis);
+    }
+
+    @CacheEvict(value = "HealthRrecord", key = "#patientId", condition = "true", beforeInvocation = true)
+    @Override
+    public int deleteById(String id,String patientId) {
+        return anamnesisWriteMapper.deleteById(id);
     }
 
     @CacheEvict(value = "HealthRrecord", key = "#anamnesis.getPatientId()", condition = "true", beforeInvocation = true)
@@ -47,12 +54,6 @@ public class AnamnesisServiceImpl implements AnamnesisService {
         return 0;
     }
 
-
-    @CacheEvict(value = "HealthRrecord", key = "#patientId", condition = "true", beforeInvocation = true)
-    @Override
-    public int deleteById(String id,String patientId) {
-        return anamnesisWriteMapper.deleteById(id);
-    }
 
     @Override
     public boolean checkRepeated(Anamnesis anamnesis) {

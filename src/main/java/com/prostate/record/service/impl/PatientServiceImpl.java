@@ -43,7 +43,6 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @CacheEvict(value = "HealthRrecord", key = "#anamnesis.patientId", condition = "true", beforeInvocation = true)
-
     @Override
     public int deleteById(String id) {
         return patientWriteMapper.deleteById(id);
@@ -72,5 +71,11 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public PatientAnamnesisBean selectPatientInfoById(String id) {
         return patientReadMapper.selectPatientInfoById(id);
+    }
+
+    @CacheEvict(value = "HealthRrecord", key = "#patient.id", condition = "true", beforeInvocation = true)
+    @Override
+    public int insertSelectiveById(Patient patient) {
+        return patientWriteMapper.insertSelectiveById(patient);
     }
 }

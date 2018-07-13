@@ -1,6 +1,5 @@
 package com.prostate.record.service.impl;
 
-import com.prostate.record.beans.CityDetailBean;
 import com.prostate.record.beans.PatientAnamnesisBean;
 import com.prostate.record.entity.Anamnesis;
 import com.prostate.record.entity.Patient;
@@ -30,12 +29,10 @@ public class PatientAnamnesisServiceImpl implements PatientAnamnesisService {
 
 
     /**
-     *
-     *
      * @param patientId
      * @return
      */
-    @Cacheable(value = "HealthRrecord", key = "#patientId",unless="#result == null")
+    @Cacheable(value = "HealthRrecord", key = "#patientId", unless = "#result == null")
     @Override
     public PatientAnamnesisBean getHealthRrecord(String patientId) {
 
@@ -45,14 +42,35 @@ public class PatientAnamnesisServiceImpl implements PatientAnamnesisService {
             return null;
         }
         PatientAnamnesisBean patientAnamnesisBean = new PatientAnamnesisBean();
-        LinkedHashMap cityDetailBean = (LinkedHashMap) staticServer.getCityDetail(patient.getCityId()).get("result");
-        patientAnamnesisBean.setCityDetailBean(cityDetailBean);
         patientAnamnesisBean.setPatient(patient);
 
-        patientAnamnesisBean.setBloodGroup(staticServer.getBloodGroupById(patient.getBloodGroupId()).get("result").toString());
-        patientAnamnesisBean.setEducationName(staticServer.getEducationById(patient.getEducationId()).get("result").toString());
-        patientAnamnesisBean.setNationName(staticServer.getNationById(patient.getNationId()).get("result").toString());
-        patientAnamnesisBean.setProfessionName(staticServer.getProfessionById(patient.getProfessionId()).get("result").toString());
+        //查询城市信息
+        String cityId = patient.getCityId();
+        if (cityId != null && cityId.length() == 32) {
+            LinkedHashMap cityDetailBean = (LinkedHashMap) staticServer.getCityDetail(patient.getCityId()).get("result");
+            patientAnamnesisBean.setCityDetailBean(cityDetailBean);
+        }
+        //查询血型信息
+        String bloodGroupId = patient.getBloodGroupId();
+        if (bloodGroupId != null && bloodGroupId.length() == 32) {
+            patientAnamnesisBean.setBloodGroup(staticServer.getBloodGroupById(bloodGroupId).get("result").toString());
+        }
+
+        //查询文化程度
+        String educationId = patient.getEducationId();
+        if (educationId != null && educationId.length() == 32) {
+            patientAnamnesisBean.setEducationName(staticServer.getEducationById(educationId).get("result").toString());
+        }
+        //查询民主信息
+        String nationId = patient.getNationId();
+        if (nationId != null && nationId.length() == 32) {
+            patientAnamnesisBean.setNationName(staticServer.getNationById(nationId).get("result").toString());
+        }
+        //查询职业信息
+        String professionId = patient.getProfessionId();
+        if (professionId != null && professionId.length() == 32) {
+            patientAnamnesisBean.setProfessionName(staticServer.getProfessionById(professionId).get("result").toString());
+        }
 
         //查询病历信息
         List<Anamnesis> anamnesisList = anamnesisReadMapper.getByPatientId(patientId);
@@ -91,11 +109,11 @@ public class PatientAnamnesisServiceImpl implements PatientAnamnesisService {
                     break;
             }
         }
-        patientAnamnesisBean.setAnamnesisAllergyDrugList (anamnesisAllergyDrugList );
-        patientAnamnesisBean.setAnamnesisEatingDrugList (anamnesisEatingDrugList );
-        patientAnamnesisBean.setAnamnesisIllnessList (anamnesisIllnessList );
-        patientAnamnesisBean.setAnamnesisSurgicalHistoryList (anamnesisSurgicalHistoryList );
-        patientAnamnesisBean.setOtherList (otherList );
+        patientAnamnesisBean.setAnamnesisAllergyDrugList(anamnesisAllergyDrugList);
+        patientAnamnesisBean.setAnamnesisEatingDrugList(anamnesisEatingDrugList);
+        patientAnamnesisBean.setAnamnesisIllnessList(anamnesisIllnessList);
+        patientAnamnesisBean.setAnamnesisSurgicalHistoryList(anamnesisSurgicalHistoryList);
+        patientAnamnesisBean.setOtherList(otherList);
 
         return patientAnamnesisBean;
     }

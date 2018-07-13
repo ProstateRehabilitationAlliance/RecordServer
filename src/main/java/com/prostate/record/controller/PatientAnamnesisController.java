@@ -160,7 +160,7 @@ public class PatientAnamnesisController extends BaseController {
      * @param paramEntiey
      */
     @PostMapping(value = "update")
-    public Map updatePatient(Patient patient, ParamEntiey paramEntiey,String orderAnamnesisId,String orderAnamnesisRemark) {
+    public Map updatePatient(Patient patient, ParamEntiey paramEntiey, String orderAnamnesisId, String orderAnamnesisRemark) {
 
         if (paramEntiey.getPatientId() == null || "".equals(paramEntiey.getPatientId())) {
             return emptyParamResponse();
@@ -238,15 +238,15 @@ public class PatientAnamnesisController extends BaseController {
             }
         }
         //修改其他病史信息
-        if((orderAnamnesisId==null||orderAnamnesisId.length()!=32)&&(orderAnamnesisRemark==null||"".equals(orderAnamnesisRemark))){
+        if ((orderAnamnesisId == null || orderAnamnesisId.length() != 32) && (orderAnamnesisRemark == null || "".equals(orderAnamnesisRemark))) {
             return updateSuccseeResponse();
-        }else if((orderAnamnesisId==null||orderAnamnesisId.length()!=32)&&orderAnamnesisRemark!=null&&!"".equals(orderAnamnesisRemark)){
+        } else if ((orderAnamnesisId == null || orderAnamnesisId.length() != 32) && orderAnamnesisRemark != null && !"".equals(orderAnamnesisRemark)) {
             Anamnesis anamnesis = new Anamnesis();
             anamnesis.setAnamnesisRemark(orderAnamnesisRemark);
             anamnesis.setPatientId(patient.getId());
             anamnesis.setAnamnesisTypeId("0045a520eb9d4a3f93fbef4a2e9de0cf");
             anamnesisService.insertSelective(anamnesis);
-        }else{
+        } else {
             Anamnesis anamnesis = new Anamnesis();
             anamnesis.setPatientId(patient.getId());
             anamnesis.setId(orderAnamnesisId);
@@ -260,6 +260,7 @@ public class PatientAnamnesisController extends BaseController {
 
     /**
      * 微信 用户查询 病历信息
+     *
      * @param token
      * @return
      */
@@ -278,5 +279,90 @@ public class PatientAnamnesisController extends BaseController {
         return queryEmptyResponse();
     }
 
+
+    /**
+     * 同时  创建 患者 和 患者病历
+     *
+     * @param patient
+     * @param paramEntiey
+     * @param token
+     * @return
+     */
+    @PostMapping(value = "weChatAdd")
+    public Map weChatAdd(Patient patient, ParamEntiey paramEntiey, String token) {
+
+        if (patient.getPatientName() == null || "".equals(patient.getPatientName())) {
+            return emptyParamResponse();
+        }
+        WechatUser wechatUser = redisSerive.getWechatUser(token);
+
+        patient.setId(wechatUser.getId());
+        patient.setPatientNumber("PRA" + System.currentTimeMillis());
+        patient.setPatientAge(IdCardUtil.getAgeByIdCard(patient.getPatientCard()));
+
+        int i = patientService.insertSelectiveById(patient);
+
+
+        if (i < 0) {
+            return insertFailedResponse();
+        }
+
+        String[] anamnesisAllergyDrugIds = paramEntiey.getAnamnesisAllergyDrugIds();
+        String[] anamnesisEatingDrugIds = paramEntiey.getAnamnesisEatingDrugIds();
+        String[] anamnesisIllnessIds = paramEntiey.getAnamnesisIllnessIds();
+        String[] anamnesisSurgicalHistoryIds = paramEntiey.getAnamnesisSurgicalHistoryIds();
+        String[] otherIds = paramEntiey.getOtherIds();
+
+        if (anamnesisAllergyDrugIds != null && anamnesisAllergyDrugIds.length > 0) {
+            for (String anamnesisAllergyDrugId : anamnesisAllergyDrugIds) {
+                Anamnesis anamnesis = new Anamnesis();
+                anamnesis.setPatientId(patient.getId());
+                anamnesis.setOrderId(anamnesisAllergyDrugId);
+                anamnesis.setAnamnesisTypeId("0007fe67fa7c4c4195018ebe7926a7c7");
+                anamnesisService.insertSelective(anamnesis);
+            }
+        }
+        if (anamnesisEatingDrugIds != null && anamnesisEatingDrugIds.length > 0) {
+            for (String anamnesisEatingDrugId : anamnesisEatingDrugIds) {
+                Anamnesis anamnesis = new Anamnesis();
+                anamnesis.setPatientId(patient.getId());
+                anamnesis.setOrderId(anamnesisEatingDrugId);
+                anamnesis.setAnamnesisTypeId("00163e4597b14fe787c86e22b7946790");
+                anamnesisService.insertSelective(anamnesis);
+
+            }
+        }
+        if (anamnesisIllnessIds != null && anamnesisIllnessIds.length > 0) {
+            for (String anamnesisIllnessId : anamnesisIllnessIds) {
+                Anamnesis anamnesis = new Anamnesis();
+                anamnesis.setPatientId(patient.getId());
+                anamnesis.setOrderId(anamnesisIllnessId);
+                anamnesis.setAnamnesisTypeId("00106a226f04411b885e3f328acba4d7");
+                anamnesisService.insertSelective(anamnesis);
+
+            }
+        }
+        if (otherIds != null && otherIds.length > 0) {
+            for (String otherId : otherIds) {
+                Anamnesis anamnesis = new Anamnesis();
+                anamnesis.setPatientId(patient.getId());
+                anamnesis.setAnamnesisRemark(otherId);
+                anamnesis.setAnamnesisTypeId("0045a520eb9d4a3f93fbef4a2e9de0cf");
+                anamnesisService.insertSelective(anamnesis);
+            }
+        }
+        if (anamnesisSurgicalHistoryIds != null && anamnesisSurgicalHistoryIds.length > 0) {
+            for (String anamnesisSurgicalHistoryId : anamnesisSurgicalHistoryIds) {
+                Anamnesis anamnesis = new Anamnesis();
+                anamnesis.setPatientId(patient.getId());
+                anamnesis.setOrderId(anamnesisSurgicalHistoryId);
+                anamnesis.setAnamnesisTypeId("0007fe67fa7c4c4195018ede7926a7c7");
+                anamnesisService.insertSelective(anamnesis);
+            }
+        }
+
+        return insertSuccseeResponse(patient.getId());
+
+    }
 
 }

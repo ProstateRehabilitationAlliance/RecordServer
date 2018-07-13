@@ -1,7 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.prostate.record.mapper.pomr.write.PatientWriteMapper">
-
+    <insert id="insertSelectiveById" parameterType="com.prostate.record.entity.Patient">
+        insert into pomr_patient
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="patientNumber != null">
+                patient_number,
+            </if>
+            <if test="patientName != null">
+                patient_name,
+            </if>
+            <if test="patientCard != null">
+                patient_card,
+            </if>
+            <if test="patientPhone != null">
+                patient_phone,
+            </if>
+            <if test="patientBirthday != null">
+                patient_birthday,
+            </if>
+            <if test="patientAge != null">
+                patient_age,
+            </if>
+            <if test="patientSex != null">
+                patient_sex,
+            </if>
+            <if test="patientHeight != null">
+                patient_height,
+            </if>
+            <if test="patientWeight != null">
+                patient_weight,
+            </if>
+            <if test="cityId != null">
+                city_id,
+            </if>
+            <if test="detailAddress != null">
+                detail_address,
+            </if>
+            <if test="educationId != null">
+                education_id,
+            </if>
+            <if test="professionId != null">
+                profession_id,
+            </if>
+            <if test="nationId != null">
+                nation_id,
+            </if>
+            <if test="bloodGroupId != null">
+                blood_group_id,
+            </if>
+            <if test="createDoctor != null">
+                create_doctor,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateDoctor != null">
+                update_doctor,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="deleteDoctor != null">
+                delete_doctor,
+            </if>
+            <if test="deleteTime != null">
+                delete_time,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="patientNumber != null">
+                #{patientNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="patientName != null">
+                #{patientName,jdbcType=VARCHAR},
+            </if>
+            <if test="patientCard != null">
+                #{patientCard,jdbcType=VARCHAR},
+            </if>
+            <if test="patientPhone != null">
+                #{patientPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="patientBirthday != null">
+                #{patientBirthday,jdbcType=VARCHAR},
+            </if>
+            <if test="patientAge != null">
+                #{patientAge,jdbcType=CHAR},
+            </if>
+            <if test="patientSex != null">
+                #{patientSex,jdbcType=CHAR},
+            </if>
+            <if test="patientHeight != null">
+                #{patientHeight,jdbcType=CHAR},
+            </if>
+            <if test="patientWeight != null">
+                #{patientWeight,jdbcType=CHAR},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=VARCHAR},
+            </if>
+            <if test="detailAddress != null">
+                #{detailAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="educationId != null">
+                #{educationId,jdbcType=VARCHAR},
+            </if>
+            <if test="professionId != null">
+                #{professionId,jdbcType=VARCHAR},
+            </if>
+            <if test="nationId != null">
+                #{nationId,jdbcType=VARCHAR},
+            </if>
+            <if test="bloodGroupId != null">
+                #{bloodGroupId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDoctor != null">
+                #{createDoctor,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDoctor != null">
+                #{updateDoctor,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleteDoctor != null">
+                #{deleteDoctor,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteTime != null">
+                #{deleteTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=CHAR},
+            </if>
+        </trim>
+    </insert>
     <!--插入患者信息-->
     <insert id="insertSelective" parameterType="com.prostate.record.entity.Patient">
         <selectKey keyProperty="id" resultType="java.lang.String"
@@ -198,6 +342,9 @@
             </if>
             <if test="bloodGroupId != null">
                 blood_group_id = #{bloodGroupId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDoctor != null">
+                create_doctor = #{createDoctor,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=VARCHAR}

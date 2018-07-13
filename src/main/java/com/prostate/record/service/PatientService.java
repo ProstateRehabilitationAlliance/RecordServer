@@ -25,4 +25,6 @@ public interface PatientService extends BaseService<Patient> {
     String selectCountByParams(PatientBean patientBean);
 
     PatientAnamnesisBean selectPatientInfoById(String id);
+
+    int insertSelectiveById(Patient patient);
 }

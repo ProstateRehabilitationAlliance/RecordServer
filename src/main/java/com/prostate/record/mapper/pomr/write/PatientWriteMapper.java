@@ -20,4 +20,6 @@ public interface PatientWriteMapper extends BaseWriteMapper<Patient> {
     String selectCountByParams(PatientBean patientBean);
 
     PatientAnamnesisBean selectPatientInfoById(String id);
+
+    int insertSelectiveById(Patient patient);
 }
