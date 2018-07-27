@@ -4,20 +4,26 @@
 
     <!--自定义变量-->
     <property name="logdir" value="C:/Users/Administrator/Desktop/"/>
-    <property name="appname" value="doctor"/>
+    <property name="appname" value="record"/>
 
     <!--日志上下文名称-->
     <contextName>${appname}</contextName>
-
-
+    <!--
+       {"%red":"红色","%green":"绿色","%yellow":"黄色","%blue":"蓝色","%magenta":"洋红","%cyan":"青色","%white":"白色","%gray":"灰色","%boldRed":"红黑体","%boldGreen":"粗体绿","%boldYellow":"黑体黄","%boldBlue":"黑体蓝","%boldMagenta":"黑体紫","%boldCyan":"黑体青","%boldWhite":"黑体白","%highlight":"高亮"}
+    -->
     <!-- dev 开发环境 输出到控制台 -->
     <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
         <!--展示格式 layout-->
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>
-                <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+                <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{0} - %msg%n</pattern>
             </pattern>
         </layout>
+    </appender>
+    <appender name="SQL_CONSOLE_LOG" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{HH:mm:ss} %boldCyan(%logger{0}) %highlight(%boldGreen(%msg%n))</pattern>
+        </encoder>
     </appender>
 
     <!-- test 测试环境 输出到文件 info-->
@@ -80,22 +86,40 @@
         </encoder>
     </appender>
 
-    <!-- 测试环境+开发环境. 多个使用逗号隔开. -->
+    <!-- 开发环境. 多个使用逗号隔开. -->
     <springProfile name="dev">
-        <logger name="com.maxcoder.sys.controller" level="INFO" additivity="false">
+        <logger name="com.prostate.record.aspect" level="INFO" additivity="false">
             <appender-ref ref="consoleLog"/>
         </logger>
+        <logger name="com.prostate.record.controller" level="DEBUG" additivity="false">
+            <appender-ref ref="consoleLog"/>
+        </logger>
+        <logger name="com.prostate.record.service" level="DEBUG" additivity="false">
+            <appender-ref ref="consoleLog"/>
+        </logger>
+        <logger name="com.prostate.record.mapper" level="DEBUG" additivity="false">
+            <appender-ref ref="SQL_CONSOLE_LOG"/>
+        </logger>
+        <logger name="com.prostate.record" level="info" additivity="false">
+            <appender-ref ref="SQL_CONSOLE_LOG"/>
+        </logger>
     </springProfile>
-
-    <!-- 生产环境. -->
-    <springProfile name="test,prod">
-        <logger name="com.prostate.record.controller" level="INFO" additivity="false">
+    <!-- 测试环境 -->
+    <springProfile name="test">
+        <logger name="com.prostate.record.mapper.pra.read" level="INFO" additivity="false">
+            <appender-ref ref="fileInfoLog"/>
+            <appender-ref ref="fileErrorLog"/>
+        </logger>
+    </springProfile>
+    <!-- 生产环境 -->
+    <springProfile name="prd">
+        <logger name="com.prostate.record.mapper.pra.read" level="INFO" additivity="false">
             <appender-ref ref="fileInfoLog"/>
             <appender-ref ref="fileErrorLog"/>
         </logger>
     </springProfile>
 
-    <root level="INFO">
+    <root level="WARN">
         <appender-ref ref="consoleLog"/>
         <!--<appender-ref ref="fileInfoLog"/>-->
         <!--<appender-ref ref="fileErrorLog"/>-->

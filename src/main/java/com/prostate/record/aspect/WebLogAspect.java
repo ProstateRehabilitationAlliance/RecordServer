@@ -28,9 +28,9 @@ public class WebLogAspect {
         HttpServletRequest request = attributes.getRequest();
         // 记录下请求内容
         log.info("URL : " + request.getRequestURL().toString());
-        log.info("HTTP_METHOD : " + request.getMethod());
-        log.info("IP : " + request.getRemoteAddr());
-        log.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+        log.debug("HTTP_METHOD : " + request.getMethod());
+        log.debug("IP : " + request.getRemoteAddr());
+        log.debug("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
         log.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));
 
 

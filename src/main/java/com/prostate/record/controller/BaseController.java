@@ -11,7 +11,7 @@ public class BaseController {
      * 参数为空返回值
      * @return
      */
-    public Map emptyParamResponse(){
+    public Map<String, Object> emptyParamResponse(){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","20001");
         resultMap.put("msg","EMPTY_PARAM");
@@ -24,7 +24,7 @@ public class BaseController {
      * @param result
      * @return
      */
-    public Map querySuccessResponse(Object result){
+    public Map<String, Object> querySuccessResponse(Object result){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","20000");
         resultMap.put("msg","SUCCESS");
@@ -37,7 +37,7 @@ public class BaseController {
      * @param result
      * @return
      */
-    public Map querySuccessResponse(Object result,String count){
+    public Map<String, Object> querySuccessResponse(Object result,String count){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","20000");
         resultMap.put("msg","SUCCESS");
@@ -49,7 +49,7 @@ public class BaseController {
      * 查询请求结果为空返回值
      * @return
      */
-    public Map queryEmptyResponse(){
+    public Map<String, Object> queryEmptyResponse(){
         resultMap = new LinkedHashMap<>();
 
         resultMap.put("code","40004");
@@ -61,7 +61,7 @@ public class BaseController {
      * 请求失败返回值
      * @return
      */
-    public Map failedResponse(){
+    public Map<String, Object> failedResponse(){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","50002");
         resultMap.put("msg","FAILED_EMPTY");
@@ -73,7 +73,7 @@ public class BaseController {
      * 请求失败返回值
      * @return
      */
-    public Map insertFailedResponse(){
+    public Map<String, Object> insertFailedResponse(){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","50003");
         resultMap.put("msg","INSERT_FAILED");
@@ -82,10 +82,23 @@ public class BaseController {
     }
 
     /**
+     * INSERT 失败返回值
+     *
+     * @return
+     */
+    public Map<String, Object> insertFailedResponse(Object result) {
+        resultMap = new LinkedHashMap<>();
+        resultMap.put("code", "50003");
+        resultMap.put("msg", "INSERT_FAILED");
+        resultMap.put("result", result);
+        return resultMap;
+    }
+
+    /**
      * 插入请求成功返回值
      * @return
      */
-    public Map insertSuccseeResponse(){
+    public Map<String, Object> insertSuccseeResponse(){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","20000");
         resultMap.put("msg","INSERT_SUCCESS");
@@ -97,7 +110,8 @@ public class BaseController {
      * @return
      */
 
-    public Map insertSuccseeResponse(Object result){
+
+    public Map<String, Object> insertSuccseeResponse(Object result){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","20000");
         resultMap.put("msg","INSERT_SUCCESS");
@@ -106,10 +120,23 @@ public class BaseController {
     }
 
     /**
+     * 插入的数据已经存在
+     * @param result
+     * @return
+     */
+    public Map<String, Object> insertalreadyExistedResponse(Object result){
+        resultMap = new LinkedHashMap<>();
+        resultMap.put("code","50012");
+        resultMap.put("msg","ALREADY_EXISTED");
+        resultMap.put("result",result);
+        return resultMap;
+    }
+
+    /**
      * UPDATE成功返回值
      * @return
      */
-    public Map updateSuccseeResponse(){
+    public Map<String, Object> updateSuccseeResponse(){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","20000");
         resultMap.put("msg","UPDATE_SUCCESS");
@@ -122,7 +149,7 @@ public class BaseController {
      * @param result
      * @return
      */
-    public Map updateSuccseeResponse(Object result){
+    public Map<String, Object> updateSuccseeResponse(Object result){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","20000");
         resultMap.put("msg","UPDATE_SUCCESS");
@@ -134,7 +161,7 @@ public class BaseController {
      * UPDATE请求失败返回值
      * @return
      */
-    public Map updateFailedResponse(){
+    public Map<String, Object> updateFailedResponse(){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","50004");
         resultMap.put("msg","UPDATE_FAILED");
@@ -147,7 +174,7 @@ public class BaseController {
      * DELETE成功返回值
      * @return
      */
-    public Map deleteSuccseeResponse(){
+    public Map<String, Object> deleteSuccseeResponse(){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","20000");
         resultMap.put("msg","DELETE_SUCCESS");
@@ -160,7 +187,7 @@ public class BaseController {
      * DELETE请求失败返回值
      * @return
      */
-    public Map deleteFailedResponse(){
+    public Map<String, Object> deleteFailedResponse(){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","50005");
         resultMap.put("msg","DELETE_FAILED");
@@ -172,7 +199,7 @@ public class BaseController {
      * 请求失败 返回值
      * @return
      */
-    public Map requestFailedResponse(Object result){
+    public Map<String, Object> requestFailedResponse(Object result){
         resultMap = new LinkedHashMap<>();
         resultMap.put("code","60001");
         resultMap.put("msg","REQUEST_FAILED");

@@ -2,10 +2,14 @@ package com.prostate.record.controller;
 
 import com.prostate.record.beans.PatientAnamnesisBean;
 import com.prostate.record.cache.redis.RedisSerive;
-import com.prostate.record.entity.*;
+import com.prostate.record.entity.Anamnesis;
+import com.prostate.record.entity.ParamEntiey;
+import com.prostate.record.entity.Patient;
+import com.prostate.record.entity.WechatUser;
 import com.prostate.record.service.AnamnesisService;
 import com.prostate.record.service.PatientAnamnesisService;
 import com.prostate.record.service.PatientService;
+import com.prostate.record.service.UserPatientService;
 import com.prostate.record.util.IdCardUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,12 +31,15 @@ public class PatientAnamnesisController extends BaseController {
 
     private PatientAnamnesisService patientAnamnesisService;
 
+    private UserPatientService userPatientService;
+
     @Autowired
-    public PatientAnamnesisController(PatientService patientService, AnamnesisService anamnesisService, RedisSerive redisSerive, PatientAnamnesisService patientAnamnesisService) {
+    public PatientAnamnesisController(PatientService patientService, AnamnesisService anamnesisService, RedisSerive redisSerive, PatientAnamnesisService patientAnamnesisService, UserPatientService userPatientService) {
         this.patientService = patientService;
         this.anamnesisService = anamnesisService;
         this.redisSerive = redisSerive;
         this.patientAnamnesisService = patientAnamnesisService;
+        this.userPatientService = userPatientService;
     }
 
     /**
@@ -50,10 +57,7 @@ public class PatientAnamnesisController extends BaseController {
             return emptyParamResponse();
         }
 
-        Doctor doctor = redisSerive.getDoctor(token);
-
-
-        patient.setCreateDoctor(doctor.getId());
+        patient.setCreateDoctor(token);
         patient.setPatientNumber("PRA" + System.currentTimeMillis());
         patient.setPatientAge(IdCardUtil.getAgeByIdCard(patient.getPatientCard()));
 
@@ -76,7 +80,7 @@ public class PatientAnamnesisController extends BaseController {
                 anamnesis.setPatientId(patient.getId());
                 anamnesis.setOrderId(anamnesisAllergyDrugId);
                 anamnesis.setAnamnesisTypeId("0007fe67fa7c4c4195018ebe7926a7c7");
-                anamnesis.setCreateDoctor(doctor.getId());
+                anamnesis.setCreateDoctor(token);
                 anamnesisService.insertSelective(anamnesis);
             }
         }
@@ -86,7 +90,7 @@ public class PatientAnamnesisController extends BaseController {
                 anamnesis.setPatientId(patient.getId());
                 anamnesis.setOrderId(anamnesisEatingDrugId);
                 anamnesis.setAnamnesisTypeId("00163e4597b14fe787c86e22b7946790");
-                anamnesis.setCreateDoctor(doctor.getId());
+                anamnesis.setCreateDoctor(token);
                 anamnesisService.insertSelective(anamnesis);
 
             }
@@ -97,7 +101,7 @@ public class PatientAnamnesisController extends BaseController {
                 anamnesis.setPatientId(patient.getId());
                 anamnesis.setOrderId(anamnesisIllnessId);
                 anamnesis.setAnamnesisTypeId("00106a226f04411b885e3f328acba4d7");
-                anamnesis.setCreateDoctor(doctor.getId());
+                anamnesis.setCreateDoctor(token);
                 anamnesisService.insertSelective(anamnesis);
 
             }
@@ -108,7 +112,7 @@ public class PatientAnamnesisController extends BaseController {
                 anamnesis.setPatientId(patient.getId());
                 anamnesis.setAnamnesisRemark(otherId);
                 anamnesis.setAnamnesisTypeId("0045a520eb9d4a3f93fbef4a2e9de0cf");
-                anamnesis.setCreateDoctor(doctor.getId());
+                anamnesis.setCreateDoctor(token);
                 anamnesisService.insertSelective(anamnesis);
             }
         }
@@ -118,11 +122,11 @@ public class PatientAnamnesisController extends BaseController {
                 anamnesis.setPatientId(patient.getId());
                 anamnesis.setOrderId(anamnesisSurgicalHistoryId);
                 anamnesis.setAnamnesisTypeId("0007fe67fa7c4c4195018ede7926a7c7");
-                anamnesis.setCreateDoctor(doctor.getId());
+                anamnesis.setCreateDoctor(token);
                 anamnesisService.insertSelective(anamnesis);
             }
         }
-
+        userPatientService.addUserPatient(patient.getId(), token, "门诊");
         return insertSuccseeResponse(patient.getId());
 
     }
@@ -294,9 +298,9 @@ public class PatientAnamnesisController extends BaseController {
         if (patient.getPatientName() == null || "".equals(patient.getPatientName())) {
             return emptyParamResponse();
         }
-        WechatUser wechatUser = redisSerive.getWechatUser(token);
 
-        patient.setId(wechatUser.getId());
+        patient.setId(token);
+        patient.setCreateDoctor(token);
         patient.setPatientNumber("PRA" + System.currentTimeMillis());
         patient.setPatientAge(IdCardUtil.getAgeByIdCard(patient.getPatientCard()));
 
