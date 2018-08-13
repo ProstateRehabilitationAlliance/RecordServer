@@ -21,7 +21,7 @@ public class InquiryCountDoctorServiceImpl implements InquiryCountDoctorService 
 
     @Override
     public int insertSelective(InquiryCountDoctor inquiryCountDoctor) {
-        return 0;
+        return inquiryCountDoctorWriteMapper.insertSelective(inquiryCountDoctor);
     }
 
     @Override

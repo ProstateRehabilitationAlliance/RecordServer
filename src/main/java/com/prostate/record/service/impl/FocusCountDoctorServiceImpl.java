@@ -21,7 +21,7 @@ public class FocusCountDoctorServiceImpl implements FocusCountDoctorService {
 
     @Override
     public int insertSelective(FocusCountDoctor focusCountDoctor) {
-        return 0;
+        return focusCountDoctorWriteMapper.insertSelective(focusCountDoctor);
     }
 
     @Override

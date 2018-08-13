@@ -20,7 +20,7 @@ public class ClickCountDoctorServiceImpl implements ClickCountDoctorService {
 
     @Override
     public int insertSelective(ClickCountDoctor clickCountDoctor) {
-        return 0;
+        return clickCountDoctorWriteMapper.insertSelective(clickCountDoctor);
     }
 
     @Override

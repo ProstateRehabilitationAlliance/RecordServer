@@ -7,26 +7,15 @@
     <result column="inquiry_status" jdbcType="VARCHAR" property="inquiryStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
-  <sql id="Base_Column_List">
-    id, doctor_id, inquiry_status, create_time
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from inquiry_count_doctor
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from inquiry_count_doctor
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.prostate.record.entity.InquiryCountDoctor">
-    insert into inquiry_count_doctor (id, doctor_id, inquiry_status, 
-      create_time)
-    values (#{id,jdbcType=VARCHAR}, #{doctorId,jdbcType=VARCHAR}, #{inquiryStatus,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP})
-  </insert>
   <insert id="insertSelective" parameterType="com.prostate.record.entity.InquiryCountDoctor">
+    <selectKey keyProperty="id" resultType="java.lang.String"
+               order="BEFORE">
+      select replace(uuid(),'-','') from dual
+    </selectKey>
     insert into inquiry_count_doctor
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

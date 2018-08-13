@@ -50,4 +50,39 @@ public class FocusCountController extends BaseController {
 
         return insertSuccseeResponse();
     }
+
+    /**
+     * 医生 取消关注医生 触发
+     *
+     * @param userId
+     * @return
+     */
+    @PostMapping(value = "addDoctorUnFocus")
+    public Map removeDoctorFocus(String userId) {
+
+        FocusCountDoctor focusCountDoctor = new FocusCountDoctor();
+
+        focusCountDoctor.setDoctorId(userId);
+        focusCountDoctor.setFocusStatus("DOCTOR_UN_FOCUS");
+        focusCountDoctorService.insertSelective(focusCountDoctor);
+
+        return insertSuccseeResponse();
+    }
+
+    /**
+     * 患者 取消关注医生 触发
+     *-
+     * @param userId
+     * @return
+     */
+    @PostMapping(value = "addPatientUnFocus")
+    public Map removePatientFocus(String userId) {
+        FocusCountDoctor focusCountDoctor = new FocusCountDoctor();
+
+        focusCountDoctor.setDoctorId(userId);
+        focusCountDoctor.setFocusStatus("PATIENT_UN_FOCUS");
+        focusCountDoctorService.insertSelective(focusCountDoctor);
+
+        return insertSuccseeResponse();
+    }
 }
