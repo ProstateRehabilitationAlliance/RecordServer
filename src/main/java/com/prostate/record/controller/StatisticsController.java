@@ -25,6 +25,11 @@ public class StatisticsController extends BaseController {
     @Autowired
     private InquiryCountDoctorService inquiryCountDoctorService;
 
+    /**
+     * 根据医生ID查询 医生 统计信息
+     * @param doctorId
+     * @return
+     */
     @GetMapping(value = "getDoctorCount")
     public Map getDoctorCount(String doctorId) {
 
