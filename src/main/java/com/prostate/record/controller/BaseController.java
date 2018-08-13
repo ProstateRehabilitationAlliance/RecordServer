@@ -1,12 +1,19 @@
 package com.prostate.record.controller;
 
 
+import com.prostate.record.cache.redis.RedisSerive;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisServer;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class BaseController {
 
     public  Map<String,Object> resultMap;
+
+    @Autowired
+    private RedisSerive redisSerive;
     /**
      * 参数为空返回值
      * @return
